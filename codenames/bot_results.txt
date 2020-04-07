@@ -1,1 +1,13 @@
 ---------------------------------------------NEW------------------------------------------------------
+TOTAL:9 B:1 C:0 A:0 R:8 CM:players.codemaster_wn_lin GUESSER:--wordnet SEED:time
+TOTAL:8 B:0 C:0 A:0 R:8 CM:players.codemaster_wn_lin GUESSER:--wordnet SEED:time
+TOTAL:8 B:0 C:0 A:0 R:8 CM:players.codemaster_wn_lin GUESSER:--wordnet SEED:time
+TOTAL:25 B:6 C:7 A:1 R:6 CM:human GUESSER:players.guesser_wn_lin SEED:time
+TOTAL:25 B:4 C:4 A:1 R:5 CM:human GUESSER:players.guesser_wn_lin SEED:time
+TOTAL:25 B:3 C:6 A:1 R:7 CM:human GUESSER:players.guesser_wn_lch SEED:time
+TOTAL:25 B:3 C:0 A:1 R:0 CM:human GUESSER:players.guesser_wn_lch SEED:time
+TOTAL:25 B:5 C:6 A:1 R:5 CM:human GUESSER:players.guesser_wn_lch SEED:time
+TOTAL:8 B:3 C:3 A:0 R:8 CM:players.codemaster_wn_lin GUESSER:--wordnet SEED:time
+TOTAL:25 B:3 C:0 A:1 R:4 CM:players.codemaster_wn_lin GUESSER:players.guesser_w2v SEED:3442
+TOTAL:10 B:2 C:4 A:0 R:8 CM:human GUESSER:players.guesser_w2v SEED:3442
+TOTAL:5 B:1 C:1 A:0 R:8 CM:players.codemaster_w2v_07 GUESSER:--seed SEED:3244

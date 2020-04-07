@@ -1,0 +1,2 @@
+#!/bin/bash
+python3 game.py human players.guesser_w2v --seed 3442 --w2v players/GoogleNews-vectors-negative300.bin --wordnet ic-brown.dat

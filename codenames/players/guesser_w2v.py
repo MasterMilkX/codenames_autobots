@@ -54,4 +54,6 @@ class ai_guesser(guesser):
 		sorted_words = self.compute_distance(self.clue, self.words)
 		print(f'guesses: {sorted_words}')
 		self.num -= 1
+		if len(sorted_words) == 0:
+			return "no comparisons"
 		return sorted_words[0][1]
