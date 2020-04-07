@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Codenames AI Competition Framework
 
 This is the Codenames AI Competition Framework.  The purpose of this framework is to enable an AI competition for the game "Codenames" by Vlaada Chvatil.  There are large number of AI competitions built around games (and even more platforms using games as a testbed for AI), but with few exceptions these have focused on things that AI is likely to be good at (fine, pixel-perfect control or search through a large state space).  The purpose of this competition is to test AI in a framework that:
@@ -192,3 +193,7 @@ nltk.download('all')
 ### These files can optionally be installed as well, place them under your codenames/players/ directory:
 * [Glove Vectors](https://nlp.stanford.edu/data/glove.6B.zip) (~2.25 GB)
 * [Google News Vectors](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) (~3.5 GB)
+=======
+# codenames_autobots
+Competition bots for the Codenames Competition - Research Project for AI for Games class
+>>>>>>> 29149eb7f758f1f62b9d648c066d64067c8501d2
