@@ -33,7 +33,7 @@ class human_guesser(guesser):
         return True
 
     def is_valid(self, result):
-        if result.upper() in self.words:
+        if result.upper() in self.words or result == "":
             return True
         else:
             return False

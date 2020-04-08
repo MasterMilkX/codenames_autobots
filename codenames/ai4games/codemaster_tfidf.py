@@ -5,6 +5,7 @@
 from nltk.stem import WordNetLemmatizer
 from nltk.stem.lancaster import LancasterStemmer
 from nltk.corpus import gutenberg
+import nltk
 from numpy.linalg import norm
 from players.codemaster import codemaster
 from operator import itemgetter
@@ -19,6 +20,9 @@ import scipy
 
 class ai_codemaster(codemaster):
 
+	#NUM_BOOKS = 18
+	NUM_BOOKS = 18
+
 	def __init__(self, brown_ic=None, glove_vecs=None, word_vectors=None):
 		#not necessary
 		'''
@@ -28,10 +32,13 @@ class ai_codemaster(codemaster):
 		self.wordnet_lemmatizer = WordNetLemmatizer()
 		self.lancaster_stemmer = LancasterStemmer()
 		'''
-		calcTFIDF(20)
 
-		print(self.tf_hash)
-		print(self.idf_hash)
+		self.calcTFIDF()
+
+		#books = list(self.tf_hash.keys())
+		#b1 = books[0]
+		#print(self.tf_hash[b1].keys())
+		#print(self.idf_hash)
 
 		self.cm_wordlist = []
 		with open('players/cm_wordlist.txt') as infile:
@@ -43,6 +50,9 @@ class ai_codemaster(codemaster):
 		self.maps = maps
 
 	def give_clue(self):
+		count = 0
+		red_words = []
+		bad_words = []
 
 		# Creates Red-Labeled Word arrays, and everything else arrays
 		for i in range(25):
@@ -52,53 +62,113 @@ class ai_codemaster(codemaster):
 				bad_words.append(self.words[i].lower())
 			else:
 				red_words.append(self.words[i].lower())
-		#print("RED:\t", red_words)
+		print("RED:\t", red_words)
 
 
+		bestbook, ct = self.getBestBook(red_words)	#get the most related book
 
-
-		return ["", 1]		#return a tuple of a string and an integer
+		return [self.getBestWord(bestbook), ct]		#return a tuple of a string and an integer
 
 
 
 
 	#TF-IDF CODE BELOW
-	def calcTFIDF(self, num_books):
+	def calcTFIDF(self):
 		#randomly select books to use
 		books = gutenberg.fileids()
-		sel_books = random.choices(books, k=num_books)	
+		self.sel_books = random.sample(books, self.NUM_BOOKS)	
 
+		#use all books
+		#sel_books = gutenberg.fileids()
+
+		print("Books: " + str(self.sel_books))
 
 		#make 2 tables of word frequencies
 		self.tf_hash = {}
 		self.idf_hash = {}
 
 		#iterate through each
-		for b in sel_books:
+		for b in self.sel_books:
 			#get the unique words from the book
 			words = gutenberg.words(b)
+			words = list(map(lambda x: x.lower(), words))
 			num_words = len(words)
 			u, c = np.unique(words, return_counts=True)
 
 			#get tf = (# times word w appears / # of words total)
 			tf = {}
 			for i in range(len(u)):
-				tf[u[i]] = (c[i]/num_words)
+				tag = nltk.pos_tag([u[i]])						#use nouns only
+				if('NN' in tag[0][1] or 'NP' in tag[0][1]):
+					tf[u[i]] = (c[i]/num_words)
 			self.tf_hash[b] = tf
 
 
 			#get pre-idf = (# documents with word w)
 			for w in u:
-				if w in self.idf:
-					self.idf[w] += 1
-				else
-					self.idf[w] = 1
+				tag = nltk.pos_tag([w])
+				if('NN' in tag[0][1] or 'NP' in tag[0][1]):		#use nouns only
+					if w in self.idf_hash:
+						self.idf_hash[w] += 1
+					else:
+						self.idf_hash[w] = 1
 
 		#calculate final idf
-		for w in self.idf.keys():
-			self.idf[w] = np.log(num_books/self.idf[w])
+		for w in self.idf_hash.keys():
+			self.idf_hash[w] = np.log(self.NUM_BOOKS/self.idf_hash[w])
 
 
+	def getBestBook(self, words):
+		#get idfs
+		idfs = []
+		for w in words:
+			if w in self.idf_hash:
+				idfs.append(self.idf_hash[w])
+			else:
+				idfs.append(0)
+
+		#calc tf-idfs for red words
+		tfidfs = []
+		books = self.sel_books
+		for b in books:
+			#get tfs
+			bt = []
+			bookset = self.tf_hash[b]
+			word_keys = bookset.keys()
+			for w in words:
+				if w in word_keys:
+					bt.append(bookset[w])
+				else:
+					bt.append(0)
+			
+			#calculate tf-idf
+			hehe = []
+			for i in range(len(words)):
+				hehe.append(bt[i]*idfs[i])
+			tfidfs.append(hehe)
 
 
+		#debug
+		for t in tfidfs:
+			print(t)
+
+		#get the largest sum
+		sums = []
+		for b in range(len(books)):
+			sums.append(sum(tfidfs[b]))
+
+		m = sums.index(max(sums))
+		return books[m], np.count_nonzero(tfidfs[m])
+
+	#get the word with the best tf-idf score for a book
+	def getBestWord(self, book):
+		words = list(self.tf_hash[book].keys())
+
+		tfidf = []
+		for w in words:
+			tfidf.append(self.tf_hash[book][w])
+
+		
+		b = tfidf.index(max(tfidf))
+		return words[b]
 

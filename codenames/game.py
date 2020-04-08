@@ -220,7 +220,8 @@ class Game:
 			current_map = self.list_map()
 			self.codemaster.receive_game_state(words_in_play, current_map)
 			# self.display_map()
-			self.display_board_codemaster()
+			#self.display_board_codemaster()
+			self.display_board()
 			# codemaster gives clue & number here
 			clue, num = self.codemaster.give_clue()
 			game_counter += 1
@@ -237,14 +238,15 @@ class Game:
 				guess_answer = self.guesser.give_answer()
 
 				# if no comparisons were made/found than retry input from codemaster
-				if guess_answer == "no comparisons":
+				if guess_answer == "no comparisons" or guess_answer == "":
 					break
 				guess_answer_index = words_in_play.index(guess_answer.upper().strip())
 				game_condition = self.accept_guess(guess_answer_index)
 
 				if game_condition == "Hit_Red":
 					self.cls()
-					self.display_board_codemaster()
+					#self.display_board_codemaster()
+					self.display_board()
 					guess_num += 1
 					print("Keep Guessing?")
 					keep_guessing = self.guesser.keep_guessing(clue, words_in_play)
@@ -256,6 +258,7 @@ class Game:
 
 				elif game_condition == "Lose":
 					self.display_board_codemaster()
+					#self.display_board()
 					print("You Lost")
 					game_counter = 25
 					self.write_results(game_counter)
@@ -264,6 +267,7 @@ class Game:
 
 				elif game_condition == "Win":
 					self.display_board_codemaster()
+					#self.display_board()
 					print("You Won")
 					self.write_results(game_counter)
 					print("Game Counter:", game_counter)
