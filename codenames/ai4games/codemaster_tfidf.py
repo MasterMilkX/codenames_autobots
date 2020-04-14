@@ -17,6 +17,8 @@ import numpy as np
 import random
 import scipy
 
+import wikipedia
+
 
 class ai_codemaster(codemaster):
 
@@ -33,7 +35,7 @@ class ai_codemaster(codemaster):
 		self.lancaster_stemmer = LancasterStemmer()
 		'''
 
-		self.calcTFIDF()
+	#	self.gutenberg_calcTFIDF()
 
 		#books = list(self.tf_hash.keys())
 		#b1 = books[0]
@@ -44,6 +46,8 @@ class ai_codemaster(codemaster):
 		with open('players/cm_wordlist.txt') as infile:
 			for line in infile:
 				self.cm_wordlist.append(line.rstrip())
+
+		self.wikipedia_calcTFIDF(self.cm_wordlist)
 
 	def receive_game_state(self, words, maps):
 		self.words = words
@@ -70,16 +74,9 @@ class ai_codemaster(codemaster):
 		return [self.getBestWord(bestbook), ct]		#return a tuple of a string and an integer
 
 
-
-
 	#TF-IDF CODE BELOW
-	def calcTFIDF(self):
-		#randomly select books to use
-		books = gutenberg.fileids()
-		self.sel_books = random.sample(books, self.NUM_BOOKS)	
-
-		#use all books
-		#sel_books = gutenberg.fileids()
+	def gutenberg_calcTFIDF(self):
+		self.sel_books = gutenberg.fileids()
 
 		print("Books: " + str(self.sel_books))
 
@@ -99,7 +96,7 @@ class ai_codemaster(codemaster):
 			tf = {}
 			for i in range(len(u)):
 				tag = nltk.pos_tag([u[i]])						#use nouns only
-				if('NN' in tag[0][1] or 'NP' in tag[0][1]):
+				if('NN' in tag[0][1] or 'NP' in tag[0][1] or 'JJ' in tag[0][1] or 'VB' in tag[0][1]):
 					tf[u[i]] = (c[i]/num_words)
 			self.tf_hash[b] = tf
 
@@ -107,7 +104,7 @@ class ai_codemaster(codemaster):
 			#get pre-idf = (# documents with word w)
 			for w in u:
 				tag = nltk.pos_tag([w])
-				if('NN' in tag[0][1] or 'NP' in tag[0][1]):		#use nouns only
+				if('NN' in tag[0][1] or 'NP' in tag[0][1] or 'JJ' in tag[0][1] or 'VB' in tag[0][1]):		#use nouns only
 					if w in self.idf_hash:
 						self.idf_hash[w] += 1
 					else:
@@ -115,7 +112,50 @@ class ai_codemaster(codemaster):
 
 		#calculate final idf
 		for w in self.idf_hash.keys():
-			self.idf_hash[w] = np.log(self.NUM_BOOKS/self.idf_hash[w])
+			self.idf_hash[w] = np.log(len(self.NUM_BOOKS)/self.idf_hash[w])
+
+	def wikipedia_calcTFIDF(self, completeWordSet):
+		article_res = []
+		for w in completeWordSet:
+			article_res.append(wikipedia.search(w)[0])
+
+		self.sel_books = article_res
+
+		print("Articles: " + str(self.sel_books))
+
+		#make 2 tables of word frequencies
+		self.tf_hash = {}
+		self.idf_hash = {}
+
+		#iterate through each
+		for b in self.sel_books:
+			#get the unique words from the book
+			words = wikipedia.summary(b)
+			words = list(map(lambda x: x.lower(), words))
+			num_words = len(words)
+			u, c = np.unique(words, return_counts=True)
+
+			#get tf = (# times word w appears / # of words total)
+			tf = {}
+			for i in range(len(u)):
+				tag = nltk.pos_tag([u[i]])						#use nouns only
+				if('NN' in tag[0][1] or 'NP' in tag[0][1] or 'JJ' in tag[0][1] or 'VB' in tag[0][1]):
+					tf[u[i]] = (c[i]/num_words)
+			self.tf_hash[b] = tf
+
+
+			#get pre-idf = (# documents with word w)
+			for w in u:
+				tag = nltk.pos_tag([w])
+				if('NN' in tag[0][1] or 'NP' in tag[0][1] or 'JJ' in tag[0][1] or 'VB' in tag[0][1]):		#use nouns only
+					if w in self.idf_hash:
+						self.idf_hash[w] += 1
+					else:
+						self.idf_hash[w] = 1
+
+		#calculate final idf
+		for w in self.idf_hash.keys():
+			self.idf_hash[w] = np.log(len(self.sel_books)/self.idf_hash[w])
 
 
 	def getBestBook(self, words):
