@@ -11,6 +11,6 @@ Experimental bots for the Codenames AI Competition. Baseline bots use term-frequ
 
 **human_guesser.sh** - allows the human user to guess words on the board based on cluewords given by a codemaster bot
 ```
-./human_codemaster.sh [CODEMASTER_BOT PACKAGE LOCATION] [--optional parameters associated with the bot (i.e. corpus data)]
+./human_guesser.sh [CODEMASTER_BOT PACKAGE LOCATION] [--optional parameters associated with the bot (i.e. corpus data)]
 ```
 
