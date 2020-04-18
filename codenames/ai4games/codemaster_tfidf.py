@@ -117,7 +117,13 @@ class ai_codemaster(codemaster):
 	def wikipedia_calcTFIDF(self, completeWordSet):
 		article_res = []
 		for w in completeWordSet:
-			article_res.append(wikipedia.search(w)[0])
+			try:
+			    p = wikipedia.summary(w)
+			except wikipedia.DisambiguationError as e:
+			    s = random.choice(e.options)
+			    p = wikipedia.summary(s)
+
+			article_res.append(p)
 
 		self.sel_books = article_res
 
