@@ -1,4 +1,4 @@
-# TERM-FREQUENCY INVERSE DOCUMENT FREQUENCY CODEMASTER
+# NAIVE BAYES CODEMASTER
 # CODE WRITTEN BY MILK
 
 
@@ -18,11 +18,13 @@ import random
 import scipy
 
 import wikipedia
+import string
+from PyDictionary import PyDictionary
+
+import nltk
 from nltk.corpus import stopwords
 nltk.download('stopwords')
 from nltk.tokenize import word_tokenize
-import difflib
-
 
 # need to find general word classification methodology (like branching)
 
@@ -30,6 +32,7 @@ import difflib
 class ai_codemaster(codemaster):
 
 	CATEGORIES = "ai4games/categories.txt";
+	WIKI_DICT_SET = "ai4games/wikiDict.txt";
 
 	def __init__(self, brown_ic=None, glove_vecs=None, word_vectors=None):
 		#not necessary
@@ -42,6 +45,9 @@ class ai_codemaster(codemaster):
 		'''
 
 		self.getCategories()
+		self.actual_dictionary = PyDictionary()
+		self.wikiDict = {}
+		self.readInSummaries();
 
 		self.cm_wordlist = []
 		with open('players/cm_wordlist.txt') as infile:
@@ -49,10 +55,12 @@ class ai_codemaster(codemaster):
 				self.cm_wordlist.append(line.rstrip())
 
 		self.classifyCategories()
+		self.boardSum = {}
 
 	def receive_game_state(self, words, maps):
 		self.words = words
 		self.maps = maps
+		self.readBoard(words)
 
 	def give_clue(self):
 		count = 0
@@ -95,6 +103,78 @@ class ai_codemaster(codemaster):
 
 	def getCategories(self):
 		self.categories = open(self.CATEGORIES, "r").read().split(",")
+		self.categories = list(map(lambda x: x.strip(), self.categories))
+
+	def readInSummaries(self):
+		self.wikiDict = {}
+		wd = open(self.WIKI_DICT_SET, "r").read()
+		wd_lines = wd.split('\n--\n--\n')
+		for l in wd_lines:
+			if l.strip() == "":
+				continue
+
+			parts = l.split(":")
+			if(len(parts) != 2):
+				print(l)
+
+			c = parts[0].strip()
+			s = parts[1].strip()
+			self.wikiDict[c] = s.split(" ")
+
+
+	#tokenize the summaries for the words on the board
+	def readBoard(self, boardWords):
+		if(len(self.boardSum.keys()) > 0):	#already done
+			return
+
+
+		self.boardSum = {}
+		
+		actual_dict = PyDictionary
+		n = 0
+		for b in boardWords:
+			c = b.lower()
+			n+=1
+			print(str(n) + "/" + str(len(boardWords)) + " board words summarized : " + c + "         ", end='\r')
+
+			try:
+				p = wikipedia.summary(c)
+			except wikipedia.DisambiguationError as er:
+				#if this still doesn't work the library is shit and just get the definition of the word
+				try:
+					#print(er.options[0:3])
+					#print(e.options[0])
+					p = wikipedia.summary(er.options[0], sentences=1)
+				except:
+					defin = actual_dict.meaning(c)
+					if defin is None:
+						p = c + " word"
+					else:
+						p = max(list(defin.values()), key=len)				#return longest definition			except wikipedia.PageError:
+						if type(p) is list:
+							space = " "
+							p = space.join(p)
+			#whatever just get the definition then
+			except:
+				defin = actual_dict.meaning(c)
+				if defin is None:
+					p = c + " word"
+				else:
+					p = max(list(defin.values()), key=len)			#return longest definition
+					if type(p) is list:
+						space = " "
+						p = space.join(p)
+
+			#print(p)
+			#print(p.encode('unicode_escape'))
+			words = p.split(" ")
+			words = list(map(lambda x: x.lower(), words))				#lowercase
+			table = str.maketrans('', '', string.punctuation)
+			words = list(map(lambda x: x.translate(table), words))		#remove punctuation
+			words = list(filter(lambda x: x != "", words))				#remove empty space
+			summ = " ".join(words)
+			words = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
+			self.boardSum[c] = words
 
 
 	#creates the occurence matrix for probabilities
@@ -103,35 +183,90 @@ class ai_codemaster(codemaster):
 		all_words = []
 		bag_of_words = {}		
 		self.trainTotal = 0
-		for c in self.categories:
-			try:
-				summ = wikipedia.summary(c)
-			except wikipedia.DisambiguationError as e:
-				summ = wikipedia.summary(e.options[0])
+		self.catSet = {}
 
-			#lowercase and tokenize the words (bag of words)
-			summ = summ.lower()
-			artWords = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
-			bag_of_words[c] = artWords
-			self.trainTotal += len(artWords)		#add to the whole total
-			for w in artWords:
-				if w not in all_words:
-					all_words.append(w)
+		#import it now
+		if len(list(self.wikiDict.keys())) == 0:
+			n = 0
+			for c in self.categories:
+				n+=1
+				print(str(n) + "/" + str(len(self.categories)) + " categories summarized : " + c + "         ", end='\r')
+
+				try:
+					p = wikipedia.summary(c)
+				except wikipedia.DisambiguationError as er:
+					#if this still doesn't work the library is shit and just get the definition of the word
+					try:
+						#print(er.options[0:3])
+						#print(e.options[0])
+						p = wikipedia.summary(er.options[0])
+					except:
+						defin = self.actual_dictionary.meaning(c)
+						if defin is None:
+							p = c + " word"
+						else:
+							p = max(list(defin.values()), key=len)				#return longest definition			except wikipedia.PageError:
+							if type(p) is list:
+								space = " "
+								p = space.join(p)
+				#whatever just get the definition then
+				except:
+					defin = self.actual_dictionary.meaning(c)
+					if defin is None:
+						p = c + " word"
+					else:
+						p = max(list(defin.values()), key=len)			#return longest definition
+						if type(p) is list:
+							space = " "
+							p = space.join(p)
+
+				#print(p)
+				p.replace('\n', " ")
+				summ = p
+				summ = summ.lower()
+				artWords = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
+				self.catSet[c] = artWords
+				bag_of_words[c] = artWords
+				self.trainTotal += len(artWords)		#add to the whole total
+				for w in artWords:
+					if w not in all_words:
+						all_words.append(w)
+
+		#use the external file
+		else:
+			i = 0
+			for c in self.wikiDict.keys():
+				i+= 1
+				print(str(i) + "/" + str(len(self.wikiDict.keys())) + "      ", end='\r')
+				#summ = " ".join(self.wikiDict[c])
+				#artWords = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
+				artWords = self.wikiDict[c]
+
+				self.catSet[c] = artWords
+				bag_of_words[c] = artWords
+				self.trainTotal += len(artWords)		#add to the whole total
+				for w in artWords:
+					if w not in all_words:
+						all_words.append(w)
+
+		print("IMPORTED WORD SET")
 
 		#get the counts for the probabilities
 		self.classifyCats = {}			#dict[category][word] = #; dict[category][TOTAL_NUM] = #; dict[word+"_TOTAL"] = #
 		word_cts = {}
 		for w in all_words:
-			word_cts[a] = 0
+			word_cts[w] = 0
 
 		#get the counts for each category and word
 		for c in self.categories:
 			w, cts = np.unique(bag_of_words[c], return_counts=True)
+			self.classifyCats[c] = {}
 			for a in all_words:
 				self.classifyCats[c][a] = 0		#default to 0
 				if a in w:						#get the count for this word in the category article
-					self.classifyCats[c][a] = cts[w.indexOf(a)]
-					word_cts[a] += cts[w.indexOf(a)]		#add to the word's total count
+					ind = np.where(w==a)
+					self.classifyCats[c][a] = cts[ind]
+					word_cts[a] += cts[ind]		#add to the word's total count
 
 			self.classifyCats[c]["TOTAL_NUM"] = len(bag_of_words[c])
 
@@ -147,49 +282,49 @@ class ai_codemaster(codemaster):
 	def categoryProb(self, c):
 		return self.classifyCats[c]["TOTAL_NUM"]/self.trainTotal
 
+
 	#P(x|c) - x is a word, c is a category
 	def featcategoryProb(self, x, c):
+		if x not in self.classifyCats[c].keys():
+			return 0
 		return self.classifyCats[c][x]/self.classifyCats[c]["TOTAL_NUM"]
 
-	'''
+	
 	#laplace smoothing instead? alternative P(x|c)
 	def laplace(self, x, c):
 		m = 1									# smoothing amount (add-m)
-		t = self.classifyCats[c][x]				# number of x's for class C
+		if x in self.classifyCats[c].keys():
+			t = self.classifyCats[c][x]				# number of x's for class C
+		else:
+			t = 0
 		s = len(self.word_cts.keys())			# possible values for x
 		N = self.classifyCats[c]["TOTAL_NUM"]	# number of total Cs
-		return (t+m) / (N + (m*s))
-	'''
+		return float((t+m) / (N + (m*s)))
+	
 
 	#gets the all probabilities of a word belonging to any category c
 	#P(c|x) = P(x_1|c)*P(x_2|c)*...*P(x_n|c)*P(c)
-	def allCategoryProb(self, word):
-		#get the summary for the word
-		try:
-			summ = wikipedia.summary(c)
-		except wikipedia.DisambiguationError as e:
-			summ = wikipedia.summary(e.options[0])
-
-		#lowercase and tokenize the words (bag of words) and apply them to the vector of the training data
-		summ = summ.lower()
-		artWords = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum() and word in self.word_cts.keys()]
+	def allCategoryProb(self, x):
+		
+		artWords = self.boardSum[x]
 
 		#calculate the probability for x belonging to each category
 		catSet = {}
 		for c in self.categories:
 			p = 1
 			for w in artWords:
-				p *= self.featcategoryProb(w,c)		#continue multiplying probabilities together
+				p *= self.laplace(w,c)
+				#p *= self.featcategoryProb(w,c)		#continue multiplying probabilities together
 				if p == 0:		#if 0, cancel calculations
 					break
-			p *= categoryProb(c)
-			catSet[c] = p
+			p *= self.categoryProb(c)
+			catSet[c] = float(p)
 		return catSet
 
 	#return the best category from the red words and the number
 	def chooseCategory(self, red_words, bad_words):
 		#initalize category values
-		catProbs = []
+		catProbs = {}
 		wordCatProbs = {}
 		for c in self.categories:
 			catProbs[c] = 0
@@ -200,20 +335,33 @@ class ai_codemaster(codemaster):
 			for c in self.categories:
 				catProbs[c] += wordCatProbs[r][c] 
 
+		
 		#subtract the bad words probability
 		for b in bad_words:
 			wordCatProbs[b] = self.allCategoryProb(b)
 			for c in self.categories:
-				catProbs -= wordCatProbs[b][c]
+				catProbs[c] -= wordCatProbs[b][c]
+		
 
 		#get the best category
-		bestCat = max(catProbs.iteritems(), key=operator.itemgetter(1))[0]
+		bestCat = max(catProbs, key=catProbs.get)
 
 		#find how many words have a probability higher than 0 for this category
+		s = len(self.word_cts.keys())			# possible values for x
+		N = self.classifyCats[c]["TOTAL_NUM"]	# number of total Cs
+		min_lap = float(1.0/(s+N))
+
+		#debug for contenders
+		for k, v in sorted(catProbs.items(), key=lambda item: item[1]):
+			print("%s: %s" % (key, value))
+
+
 		numWords = 0
 		for r in red_words:
-			if wordCatProbs[r][bestCat] > 0:
+			if wordCatProbs[r][bestCat] > min_lap:
 				numWords += 1
+
+		
 
 		return [bestCat, numWords]
 

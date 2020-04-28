@@ -1,13 +1,14 @@
 # TERM-FREQUENCY INVERSE DOCUMENT FREQUENCY CODEMASTER
 # CODE WRITTEN BY MILK
 
+from players.codemaster import codemaster
 
 from nltk.stem import WordNetLemmatizer
 from nltk.stem.lancaster import LancasterStemmer
 from nltk.corpus import gutenberg
 import nltk
 from numpy.linalg import norm
-from players.codemaster import codemaster
+
 from operator import itemgetter
 from numpy import *
 import gensim.models.keyedvectors as word2vec
@@ -18,12 +19,16 @@ import random
 import scipy
 
 import wikipedia
+from PyDictionary import PyDictionary
+import string
 
 
 class ai_codemaster(codemaster):
 
 	#NUM_BOOKS = 18
 	NUM_BOOKS = 18
+	CATEGORIES = "ai4games/categories.txt";
+	WIKI_DICT_SET = "ai4games/wikiDict.txt";
 
 	def __init__(self, brown_ic=None, glove_vecs=None, word_vectors=None):
 		#not necessary
@@ -43,15 +48,21 @@ class ai_codemaster(codemaster):
 		#print(self.idf_hash)
 
 		self.cm_wordlist = []
+		self.getCategories()
+		self.wikiDict = {}
+		self.readInSummaries();
+
 		with open('players/cm_wordlist.txt') as infile:
 			for line in infile:
 				self.cm_wordlist.append(line.rstrip())
 
-		self.wikipedia_calcTFIDF(self.cm_wordlist)
+		self.actual_dictionary = PyDictionary()
+		self.sel_books = {}
 
 	def receive_game_state(self, words, maps):
 		self.words = words
 		self.maps = maps
+		self.wikipedia_calcTFIDF(self.categories)
 
 	def give_clue(self):
 		count = 0
@@ -70,9 +81,31 @@ class ai_codemaster(codemaster):
 
 
 		bestbook, ct = self.getBestBook(red_words)	#get the most related book
+		#print(bestbook)
 
 		return [self.getBestWord(bestbook), ct]		#return a tuple of a string and an integer
 
+
+	def getCategories(self):
+		self.categories = open(self.CATEGORIES, "r").read().split(",")
+		self.categories = list(map(lambda x: x.strip(), self.categories))
+
+	def readInSummaries(self):
+		self.wikiDict = {}
+		wd = open(self.WIKI_DICT_SET, "r").read()
+		wd_lines = wd.split('\n--\n--\n')
+		for l in wd_lines:
+			if l.strip() == "":
+				continue
+
+			parts = l.split(":")
+			if(len(parts) != 2):
+				print(l)
+
+			c = parts[0].strip()
+			s = parts[1].strip()
+			self.wikiDict[c] = s.split(" ")
+		
 
 	#TF-IDF CODE BELOW
 	def gutenberg_calcTFIDF(self):
@@ -115,29 +148,77 @@ class ai_codemaster(codemaster):
 			self.idf_hash[w] = np.log(len(self.NUM_BOOKS)/self.idf_hash[w])
 
 	def wikipedia_calcTFIDF(self, completeWordSet):
-		article_res = []
-		for w in completeWordSet:
-			try:
-			    p = wikipedia.summary(w)
-			except wikipedia.DisambiguationError as e:
-			    s = random.choice(e.options)
-			    p = wikipedia.summary(s)
+		if(len(list(self.sel_books.keys())) > 0):		#already got all the data, don't need to do it again
+			return;
 
-			article_res.append(p)
+		#if didn't import the set beforehand, do it now
+		if len(list(self.wikiDict.keys())) == 0:
+			article_res = {}
+			n = 0
+			for w in completeWordSet:
+				n+=1
+				print(str(n) + "/" + str(len(completeWordSet)) + " words summarized : " + w + "         ", end='\r')
+				k = w
 
-		self.sel_books = article_res
+				try:
+					p = wikipedia.summary(w)
+				except wikipedia.DisambiguationError as er:
+					#if this still doesn't work the library is shit and just get the definition of the word
+					try:
+						#print(er.options[0:3])
+						#print(e.options[0])
+						p = wikipedia.summary(er.options[0])
+					except:
+						defin = self.actual_dictionary.meaning(w)
+						if defin is None:
+							p = w + " word"
+						else:
+							p = max(list(defin.values()), key=len)				#return longest definition			except wikipedia.PageError:
+							if type(p) is list:
+								space = " "
+								p = space.join(p)
+				#whatever just get the definition then
+				except:
+					defin = self.actual_dictionary.meaning(w)
+					if defin is None:
+						p = w + " word"
+					else:
+						p = max(list(defin.values()), key=len)			#return longest definition
+						if type(p) is list:
+							space = " "
+							p = space.join(p)
 
-		print("Articles: " + str(self.sel_books))
+				#print(p)
+				p.replace('\n', " ")
+				words = p.split(" ")
+				words = list(map(lambda x: x.lower(), words))				#lowercase
+				table = str.maketrans('', '', string.punctuation)
+				words = list(map(lambda x: x.translate(table), words))		#remove punctuation
+				words = list(filter(lambda x: x != "", words))				#remove empty space
+				article_res[k] = words
+
+			self.sel_books = article_res
+		
+		#otherwise use the external set
+		else:
+			self.sel_books = self.wikiDict
+
+		#print("Articles: " + str(self.sel_books))
 
 		#make 2 tables of word frequencies
 		self.tf_hash = {}
 		self.idf_hash = {}
 
 		#iterate through each
-		for b in self.sel_books:
+		for b in list(self.sel_books.keys()):
 			#get the unique words from the book
-			words = wikipedia.summary(b)
-			words = list(map(lambda x: x.lower(), words))
+			words = self.sel_books[b]
+			'''
+			words = list(map(lambda x: x.lower(), words))				#lowercase
+			table = str.maketrans('', '', string.punctuation)
+			words = list(map(lambda x: x.translate(table), words))		#remove punctuation
+			words = list(filter(lambda x: x != "", words))				#remove empty space
+			'''
 			num_words = len(words)
 			u, c = np.unique(words, return_counts=True)
 
@@ -163,6 +244,8 @@ class ai_codemaster(codemaster):
 		for w in self.idf_hash.keys():
 			self.idf_hash[w] = np.log(len(self.sel_books)/self.idf_hash[w])
 
+		#print(list(self.idf_hash.keys()))
+
 
 	def getBestBook(self, words):
 		#get idfs
@@ -175,7 +258,7 @@ class ai_codemaster(codemaster):
 
 		#calc tf-idfs for red words
 		tfidfs = []
-		books = self.sel_books
+		books = list(self.sel_books.keys())
 		for b in books:
 			#get tfs
 			bt = []
@@ -195,8 +278,8 @@ class ai_codemaster(codemaster):
 
 
 		#debug
-		for t in tfidfs:
-			print(t)
+		#for t in tfidfs:
+		#	print(t)
 
 		#get the largest sum
 		sums = []
