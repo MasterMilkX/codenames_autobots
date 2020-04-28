@@ -22,6 +22,11 @@ import wikipedia
 from PyDictionary import PyDictionary
 import string
 
+import nltk
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+from nltk.tokenize import word_tokenize
+
 
 class ai_codemaster(codemaster):
 
@@ -47,14 +52,9 @@ class ai_codemaster(codemaster):
 		#print(self.tf_hash[b1].keys())
 		#print(self.idf_hash)
 
-		self.cm_wordlist = []
-		self.getCategories()
-		self.wikiDict = {}
-		self.readInSummaries();
+		self.boardSum = {}
+		#self.readInSummaries();
 
-		with open('players/cm_wordlist.txt') as infile:
-			for line in infile:
-				self.cm_wordlist.append(line.rstrip())
 
 		self.actual_dictionary = PyDictionary()
 		self.sel_books = {}
@@ -62,7 +62,7 @@ class ai_codemaster(codemaster):
 	def receive_game_state(self, words, maps):
 		self.words = words
 		self.maps = maps
-		self.wikipedia_calcTFIDF(self.categories)
+		self.wikipedia_calcTFIDF(words)
 
 	def give_clue(self):
 		count = 0
@@ -83,29 +83,9 @@ class ai_codemaster(codemaster):
 		bestbook, ct = self.getBestBook(red_words)	#get the most related book
 		#print(bestbook)
 
-		return [self.getBestWord(bestbook), ct]		#return a tuple of a string and an integer
+		return [self.getBestWord(bestbook, self.words), ct]		#return a tuple of a string and an integer
 
-
-	def getCategories(self):
-		self.categories = open(self.CATEGORIES, "r").read().split(",")
-		self.categories = list(map(lambda x: x.strip(), self.categories))
-
-	def readInSummaries(self):
-		self.wikiDict = {}
-		wd = open(self.WIKI_DICT_SET, "r").read()
-		wd_lines = wd.split('\n--\n--\n')
-		for l in wd_lines:
-			if l.strip() == "":
-				continue
-
-			parts = l.split(":")
-			if(len(parts) != 2):
-				print(l)
-
-			c = parts[0].strip()
-			s = parts[1].strip()
-			self.wikiDict[c] = s.split(" ")
-		
+	
 
 	#TF-IDF CODE BELOW
 	def gutenberg_calcTFIDF(self):
@@ -151,57 +131,58 @@ class ai_codemaster(codemaster):
 		if(len(list(self.sel_books.keys())) > 0):		#already got all the data, don't need to do it again
 			return;
 
-		#if didn't import the set beforehand, do it now
-		if len(list(self.wikiDict.keys())) == 0:
-			article_res = {}
-			n = 0
-			for w in completeWordSet:
-				n+=1
-				print(str(n) + "/" + str(len(completeWordSet)) + " words summarized : " + w + "         ", end='\r')
-				k = w
+		article_res = {}
+		n = 0
+		for c in completeWordSet:
+			w = c.lower()
+			n+=1
+			print(str(n) + "/" + str(len(completeWordSet)) + " words summarized : " + w + "         ", end='\r')
+			k = w
 
+			try:
+				p = wikipedia.summary(w)
+			except wikipedia.DisambiguationError as er:
+				#if this still doesn't work the library is shit and just get the definition of the word
 				try:
-					p = wikipedia.summary(w)
-				except wikipedia.DisambiguationError as er:
-					#if this still doesn't work the library is shit and just get the definition of the word
-					try:
-						#print(er.options[0:3])
-						#print(e.options[0])
-						p = wikipedia.summary(er.options[0])
-					except:
-						defin = self.actual_dictionary.meaning(w)
-						if defin is None:
-							p = w + " word"
-						else:
-							p = max(list(defin.values()), key=len)				#return longest definition			except wikipedia.PageError:
-							if type(p) is list:
-								space = " "
-								p = space.join(p)
-				#whatever just get the definition then
+					#print(er.options[0:3])
+					#print(e.options[0])
+					p = wikipedia.summary(er.options[0])
 				except:
 					defin = self.actual_dictionary.meaning(w)
 					if defin is None:
 						p = w + " word"
 					else:
-						p = max(list(defin.values()), key=len)			#return longest definition
+						p = max(list(defin.values()), key=len)				#return longest definition			except wikipedia.PageError:
 						if type(p) is list:
 							space = " "
 							p = space.join(p)
+			#whatever just get the definition then
+			except:
+				defin = self.actual_dictionary.meaning(w)
+				if defin is None:
+					p = w + " word"
+				else:
+					p = max(list(defin.values()), key=len)			#return longest definition
+					if type(p) is list:
+						space = " "
+						p = space.join(p)
 
-				#print(p)
-				p.replace('\n', " ")
-				words = p.split(" ")
-				words = list(map(lambda x: x.lower(), words))				#lowercase
-				table = str.maketrans('', '', string.punctuation)
-				words = list(map(lambda x: x.translate(table), words))		#remove punctuation
-				words = list(filter(lambda x: x != "", words))				#remove empty space
-				article_res[k] = words
+			#print(p)
+			p = p.replace('\n', " ", 1000)
+			p = p.replace('\\n', " ", 1000)
+			p = p.replace('\n\n', " ", 1000)
+			p.strip()
+			words = p.split(" ")
+			words = list(map(lambda x: x.lower(), words))				#lowercase
+			table = str.maketrans('', '', string.punctuation)
+			words = list(map(lambda x: x.translate(table), words))		#remove punctuation
+			words = list(filter(lambda x: x != "", words))				#remove empty space
+			summ = " ".join(words)
+			words = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
+			article_res[k] = words
 
-			self.sel_books = article_res
+		self.sel_books = article_res
 		
-		#otherwise use the external set
-		else:
-			self.sel_books = self.wikiDict
 
 		#print("Articles: " + str(self.sel_books))
 
@@ -213,32 +194,22 @@ class ai_codemaster(codemaster):
 		for b in list(self.sel_books.keys()):
 			#get the unique words from the book
 			words = self.sel_books[b]
-			'''
-			words = list(map(lambda x: x.lower(), words))				#lowercase
-			table = str.maketrans('', '', string.punctuation)
-			words = list(map(lambda x: x.translate(table), words))		#remove punctuation
-			words = list(filter(lambda x: x != "", words))				#remove empty space
-			'''
 			num_words = len(words)
 			u, c = np.unique(words, return_counts=True)
 
 			#get tf = (# times word w appears / # of words total)
 			tf = {}
 			for i in range(len(u)):
-				tag = nltk.pos_tag([u[i]])						#use nouns only
-				if('NN' in tag[0][1] or 'NP' in tag[0][1] or 'JJ' in tag[0][1] or 'VB' in tag[0][1]):
-					tf[u[i]] = (c[i]/num_words)
+				tf[u[i]] = (c[i]/num_words)
 			self.tf_hash[b] = tf
 
 
 			#get pre-idf = (# documents with word w)
 			for w in u:
-				tag = nltk.pos_tag([w])
-				if('NN' in tag[0][1] or 'NP' in tag[0][1] or 'JJ' in tag[0][1] or 'VB' in tag[0][1]):		#use nouns only
-					if w in self.idf_hash:
-						self.idf_hash[w] += 1
-					else:
-						self.idf_hash[w] = 1
+				if w in self.idf_hash.keys():
+					self.idf_hash[w] += 1
+				else:
+					self.idf_hash[w] = 1
 
 		#calculate final idf
 		for w in self.idf_hash.keys():
@@ -290,11 +261,13 @@ class ai_codemaster(codemaster):
 		return books[m], np.count_nonzero(tfidfs[m])
 
 	#get the word with the best tf-idf score for a book
-	def getBestWord(self, book):
+	def getBestWord(self, book, boardwords):
 		words = list(self.tf_hash[book].keys())
 
 		tfidf = []
 		for w in words:
+			if w.upper() in boardwords:
+				continue
 			tfidf.append(self.tf_hash[book][w])
 
 		

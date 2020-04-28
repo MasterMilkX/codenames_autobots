@@ -1,4 +1,4 @@
-# NAIVE BAYES CODEMASTER
+# NAIVE BAYES GUESSER
 # CODE WRITTEN BY MILK
 
 
@@ -7,7 +7,7 @@ from nltk.stem.lancaster import LancasterStemmer
 from nltk.corpus import gutenberg
 import nltk
 from numpy.linalg import norm
-from players.codemaster import codemaster
+from players.guesser import guesser
 from operator import itemgetter
 from numpy import *
 import gensim.models.keyedvectors as word2vec
@@ -29,7 +29,7 @@ from PyDictionary import PyDictionary
 # need to find general word classification methodology (like branching)
 
 
-class ai_codemaster(codemaster):
+class ai_guesser(guesser):
 
 	CATEGORIES = "ai4games/categories.txt";
 	WIKI_DICT_SET = "ai4games/wikiDict.txt";
@@ -49,10 +49,11 @@ class ai_codemaster(codemaster):
 
 		self.classifyCategories()
 		self.boardSum = {}
-		self.curGuesses = {}
+		self.curGuesses = []
 
 	def get_board(self, words):
 		self.words = words
+		self.readBoard(words)
 
 	def get_clue(self, clue, num):
 		self.clue = clue
@@ -66,10 +67,10 @@ class ai_codemaster(codemaster):
 
 	def give_answer(self):
 		#add the new guesses to the list of possible guesses
-		self.curGuesses.push(self.chooseWords(self.clue, self.num, self.words))
-		resortGuesses()
+		self.curGuesses.extend(self.chooseWords(self.clue, self.num, self.words))
+		self.resortGuesses()
 
-		bestGuess = self.curGuesses.pop(0).split("-")[0]
+		bestGuess = self.curGuesses.pop(0).split("|")[0]
 		return bestGuess				#returns a string for the guess
 
 
@@ -91,13 +92,13 @@ class ai_codemaster(codemaster):
 		#split
 		sortD = {}
 		for g in self.curGuesses:
-			p = g.split("-")
-			sortD[p[0]] = float(sortD[p[1]])
+			p = g.split("|")
+			sortD[str(p[0])] = float(p[1])
 
 		#sort + reform
 		newsort = []
-		for k, v in sorted(sortD.items(), key=lambda item: item[1]):
-			newsort.push(str(k) + "-" + str(v))
+		for k, v in sorted(sortD.items(), key=lambda item: float(item[1]), reverse=True):
+			newsort.append(str(k) + "|" + str(v))
 
 		self.curGuesses = newsort
 
@@ -177,6 +178,103 @@ class ai_codemaster(codemaster):
 			summ = " ".join(words)
 			words = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
 			self.boardSum[c] = words
+			#print(" ".join(words))
+
+		#creates the occurence matrix for probabilities
+	def classifyCategories(self):
+		#get bag of words
+		all_words = []
+		bag_of_words = {}		
+		self.trainTotal = 0
+		self.catSet = {}
+
+		#import it now
+		if len(list(self.wikiDict.keys())) == 0:
+			n = 0
+			for c in self.categories:
+				n+=1
+				print(str(n) + "/" + str(len(self.categories)) + " categories summarized : " + c + "         ", end='\r')
+
+				try:
+					p = wikipedia.summary(c)
+				except wikipedia.DisambiguationError as er:
+					#if this still doesn't work the library is shit and just get the definition of the word
+					try:
+						#print(er.options[0:3])
+						#print(e.options[0])
+						p = wikipedia.summary(er.options[0])
+					except:
+						defin = self.actual_dictionary.meaning(c)
+						if defin is None:
+							p = c + " word"
+						else:
+							p = max(list(defin.values()), key=len)				#return longest definition			except wikipedia.PageError:
+							if type(p) is list:
+								space = " "
+								p = space.join(p)
+				#whatever just get the definition then
+				except:
+					defin = self.actual_dictionary.meaning(c)
+					if defin is None:
+						p = c + " word"
+					else:
+						p = max(list(defin.values()), key=len)			#return longest definition
+						if type(p) is list:
+							space = " "
+							p = space.join(p)
+
+				#print(p)
+				p.replace('\n', " ")
+				summ = p
+				summ = summ.lower()
+				artWords = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
+				self.catSet[c] = artWords
+				bag_of_words[c] = artWords
+				self.trainTotal += len(artWords)		#add to the whole total
+				for w in artWords:
+					if w not in all_words:
+						all_words.append(w)
+
+		#use the external file
+		else:
+			i = 0
+			for c in self.wikiDict.keys():
+				i+= 1
+				print(str(i) + "/" + str(len(self.wikiDict.keys())) + "      ", end='\r')
+				#summ = " ".join(self.wikiDict[c])
+				#artWords = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
+				artWords = self.wikiDict[c]
+
+				self.catSet[c] = artWords
+				bag_of_words[c] = artWords
+				self.trainTotal += len(artWords)		#add to the whole total
+				for w in artWords:
+					if w not in all_words:
+						all_words.append(w)
+
+		print("IMPORTED WORD SET")
+
+		#get the counts for the probabilities
+		self.classifyCats = {}			#dict[category][word] = #; dict[category][TOTAL_NUM] = #; dict[word+"_TOTAL"] = #
+		word_cts = {}
+		for w in all_words:
+			word_cts[w] = 0
+
+		#get the counts for each category and word
+		for c in self.categories:
+			w, cts = np.unique(bag_of_words[c], return_counts=True)
+			self.classifyCats[c] = {}
+			for a in all_words:
+				self.classifyCats[c][a] = 0		#default to 0
+				if a in w:						#get the count for this word in the category article
+					ind = np.where(w==a)
+					self.classifyCats[c][a] = cts[ind]
+					word_cts[a] += cts[ind]		#add to the word's total count
+
+			self.classifyCats[c]["TOTAL_NUM"] = len(bag_of_words[c])
+
+
+		self.word_cts = word_cts
 
 
 	#P(x) - x is a word
@@ -229,13 +327,18 @@ class ai_codemaster(codemaster):
 	#get the words most related to the clue (assuming the clue is a category word)
 	def chooseWords(self, clue, num, boardWords):
 		catProbs = {}
-		for x in boardWords:
-			catProbs[x] = self.laplace(x,clue)
+		for b in boardWords:
+			if "*" in b:
+				continue
+			x = b.lower()
+			allCats = self.allCategoryProb(x)
+			#print(allCats)
+			catProbs[x] = allCats[clue]
 
 		outD = []
-		for k, v in sorted(catProbs.items(), key=lambda item: item[1]):
-			outD.push(str(k) + "-" + str(v))
-			print("%s: %s" % (key, value))
+		for k, v in sorted(catProbs.items(), key=lambda item: float(item[1]), reverse=True):
+			outD.append(str(k) + "|" + str(v))
+			print("%s: %s" % (k, v))
 
 		#return the top x guesses
 		return outD[:num]

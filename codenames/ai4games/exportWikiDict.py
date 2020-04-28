@@ -52,10 +52,10 @@ def exportWikiDict():
 
 		#print(p)
 
-		p.replace('\n', " ", 1000)
-		p.replace('\n\n', " ", 1000)
-		p.replace('\\n', " ", 1000)
-		p.replace('\\\\n', " ", 1000)
+		p = p.replace('\n', " ", 1000)
+		p = p.replace('\n\n', " ", 1000)
+		p = p.replace('\\n', " ", 1000)
+		p = p.replace('\\\\n', " ", 1000)
 		p.strip()
 		#print(p.encode('unicode_escape'))
 		words = p.split(" ")

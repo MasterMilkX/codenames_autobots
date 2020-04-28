@@ -66,19 +66,26 @@ class ai_codemaster(codemaster):
 		count = 0
 		red_words = []
 		bad_words = []
+		blue_words = []
+		civ_words = []
+		ass_words = []
 
 		# Creates Red-Labeled Word arrays, and everything else arrays
 		for i in range(25):
 			if self.words[i][0] == '*':
 				continue
-			elif self.maps[i] == "Assassin" or self.maps[i] == "Blue" or self.maps[i] == "Civilian":
-				bad_words.append(self.words[i].lower())
+			elif self.maps[i] == "Assassin":
+				ass_words.append(self.words[i].lower())
+			elif self.maps[i] == "Blue":
+				blue_words.append(self.words[i].lower())
+			elif self.maps[i] == "Civilian":
+				civ_words.append(self.words[i].lower())
 			else:
 				red_words.append(self.words[i].lower())
 		print("RED:\t", red_words)
 
 
-		return self.chooseCategory(red_words, bad_words)
+		return self.chooseCategory(red_words, ass_words, blue_words, civ_words)
 		#return ["",0]		#return a tuple of a string and an integer
 
 
@@ -322,7 +329,7 @@ class ai_codemaster(codemaster):
 		return catSet
 
 	#return the best category from the red words and the number
-	def chooseCategory(self, red_words, bad_words):
+	def chooseCategory(self, red_words, a_words, b_words, c_words):
 		#initalize category values
 		catProbs = {}
 		wordCatProbs = {}
@@ -333,18 +340,28 @@ class ai_codemaster(codemaster):
 		for r in red_words:
 			wordCatProbs[r] = self.allCategoryProb(r)
 			for c in self.categories:
-				catProbs[c] += wordCatProbs[r][c] 
+				catProbs[c] += 3.0*wordCatProbs[r][c] 
 
 		
-		#subtract the bad words probability
-		for b in bad_words:
+		#subtract the bad words probability * some weight
+		for b in a_words:
+			wordCatProbs[b] = self.allCategoryProb(b)
+			for c in self.categories:
+				catProbs[c] -= (3.0*wordCatProbs[b][c])
+
+		for b in b_words:
+			wordCatProbs[b] = self.allCategoryProb(b)
+			for c in self.categories:
+				catProbs[c] -= (2.0*wordCatProbs[b][c])
+
+		for b in c_words:
 			wordCatProbs[b] = self.allCategoryProb(b)
 			for c in self.categories:
 				catProbs[c] -= wordCatProbs[b][c]
 		
 
 		#get the best category
-		bestCat = max(catProbs, key=catProbs.get)
+		bestCat = ""
 
 		#find how many words have a probability higher than 0 for this category
 		s = len(self.word_cts.keys())			# possible values for x
@@ -352,16 +369,21 @@ class ai_codemaster(codemaster):
 		min_lap = float(1.0/(s+N))
 
 		#debug for contenders
-		for k, v in sorted(catProbs.items(), key=lambda item: item[1]):
-			print("%s: %s" % (key, value))
-
+		for k, v in sorted(catProbs.items(), key=lambda item: float(item[1]), reverse=True):
+			if bestCat == "":
+				bestCat = k
+			print("%s: %s" % (k, v))
 
 		numWords = 0
 		for r in red_words:
 			if wordCatProbs[r][bestCat] > min_lap:
 				numWords += 1
 
-		
+		#default to one at a time if no good one found
+		if numWords == 0:
+			allCats = self.allCategoryProb(red_words[0])
+			bestCat = max(allCats, key=allCats.get)
+			numWords = 1
 
 		return [bestCat, numWords]
 

@@ -221,7 +221,10 @@ class Game:
 			self.codemaster.receive_game_state(words_in_play, current_map)
 			# self.display_map()
 			#self.display_board_codemaster()
-			self.display_board()
+			if not sys.argv[1] == "human":
+				self.display_board()
+			else:
+				self.display_board_codemaster()
 			# codemaster gives clue & number here
 			clue, num = self.codemaster.give_clue()
 			game_counter += 1
