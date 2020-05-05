@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 game.py $1 human
+python3 game.py human $1

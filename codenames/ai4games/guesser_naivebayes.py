@@ -68,7 +68,7 @@ class ai_guesser(guesser):
 	def give_answer(self):
 		#add the new guesses to the list of possible guesses
 		self.curGuesses.extend(self.chooseWords(self.clue, self.num, self.words))
-		self.resortGuesses()
+		self.reortGuesses()
 
 		bestGuess = self.curGuesses.pop(0).split("|")[0]
 		return bestGuess				#returns a string for the guess
@@ -88,7 +88,7 @@ class ai_guesser(guesser):
 	'''
 
 	#sort the guesses based on value
-	def resortGuesses(self):
+	def reSortGuesses(self):
 		#split
 		sortD = {}
 		for g in self.curGuesses:

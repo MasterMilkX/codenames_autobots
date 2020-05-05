@@ -16,3 +16,5 @@ TOTAL:25 B:2 C:2 A:1 R:3 CM:human GUESSER:ai4games.guesser_naivebayes SEED:time
 TOTAL:25 B:4 C:5 A:1 R:1 CM:ai4games.codemaster_naivebayes GUESSER:ai4games.guesser_naivebayes SEED:time
 TOTAL:25 B:4 C:7 A:1 R:2 CM:ai4games.codemaster_naivebayes GUESSER:ai4games.guesser_naivebayes SEED:time
 TOTAL:25 B:5 C:7 A:1 R:4 CM:ai4games.codemaster_naivebayes GUESSER:ai4games.guesser_naivebayes SEED:time
+TOTAL:25 B:2 C:1 A:1 R:2 CM:human GUESSER:ai4games.guesser_tfidf SEED:time
+TOTAL:25 B:0 C:0 A:1 R:2 CM:human GUESSER:ai4games.guesser_tfidf SEED:time
