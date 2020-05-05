@@ -68,7 +68,7 @@ class ai_guesser(guesser):
 	def give_answer(self):
 		#add the new guesses to the list of possible guesses
 		self.curGuesses.extend(self.chooseWords(self.clue, self.num, self.words))
-		self.reortGuesses()
+		self.reSortGuesses()
 
 		bestGuess = self.curGuesses.pop(0).split("|")[0]
 		return bestGuess				#returns a string for the guess
@@ -333,12 +333,17 @@ class ai_guesser(guesser):
 			x = b.lower()
 			allCats = self.allCategoryProb(x)
 			#print(allCats)
-			catProbs[x] = allCats[clue]
+			if clue in allCats:
+				catProbs[x] = allCats[clue]
+			else:
+				catProbs[x] = 0
 
 		outD = []
-		for k, v in sorted(catProbs.items(), key=lambda item: float(item[1]), reverse=True):
+		for k, v in sorted(catProbs.items(), key=lambda item: float(item[1]),reverse=True):
 			outD.append(str(k) + "|" + str(v))
 			print("%s: %s" % (k, v))
+
+		print(outD[:num])
 
 		#return the top x guesses
 		return outD[:num]

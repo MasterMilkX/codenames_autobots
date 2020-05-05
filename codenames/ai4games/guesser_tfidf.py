@@ -220,7 +220,7 @@ class ai_guesser(guesser):
 			bestbook = random.choice(list(self.sel_books.keys()))
 
 		print("Using book: " + bestbook)
-		print(self.sel_books[bestbook])
+		#print(self.sel_books[bestbook])
 
 
 		#use the book to get the best board words
@@ -239,7 +239,7 @@ class ai_guesser(guesser):
 		outD = []
 		for k, v in sorted(wordProbs.items(), key=lambda item: float(item[1]), reverse=True):
 			outD.append(str(k) + "|" + str(v))
-			print("%s: %s" % (k, v))
+			#print("%s: %s" % (k, v))
 
 		#return the top x guesses
 		return outD[:(num)]

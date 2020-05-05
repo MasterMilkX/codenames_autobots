@@ -312,7 +312,6 @@ class ai_codemaster(codemaster):
 	#gets the all probabilities of a word belonging to any category c
 	#P(c|x) = P(x_1|c)*P(x_2|c)*...*P(x_n|c)*P(c)
 	def allCategoryProb(self, x):
-		
 		artWords = self.boardSum[x]
 
 		#calculate the probability for x belonging to each category
