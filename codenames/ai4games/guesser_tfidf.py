@@ -1,4 +1,4 @@
-# NAIVE BAYES GUESSER
+# TF-IDF GUESSER
 # CODE WRITTEN BY MILK
 
 
@@ -38,7 +38,6 @@ class ai_guesser(guesser):
 		self.num = 0
 
 		self.actual_dictionary = PyDictionary()
-		self.wikiDict = {}
 
 		self.cm_wordlist = []
 		with open('players/cm_wordlist.txt') as infile:
@@ -69,6 +68,8 @@ class ai_guesser(guesser):
 		self.reSortGuesses()
 
 		bestGuess = self.curGuesses.pop(0).split("|")[0]
+		#print(self.words)
+		#self.words.remove(bestGuess.upper())
 		return bestGuess				#returns a string for the guess
 
 
@@ -84,7 +85,8 @@ class ai_guesser(guesser):
 		#sort + reform
 		newsort = []
 		for k, v in sorted(sortD.items(), key=lambda item: float(item[1]), reverse=True):
-			newsort.append(str(k) + "|" + str(v))
+			if k.upper() in self.words:
+				newsort.append(str(k) + "|" + str(v))
 
 		self.curGuesses = newsort
 
@@ -143,6 +145,7 @@ class ai_guesser(guesser):
 			words = list(filter(lambda x: x != "", words))				#remove empty space
 			summ = " ".join(words)
 			words = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
+			words.append(w)		#add the word itself in case it's not already in the set
 			article_res[k] = words
 
 		self.sel_books = article_res
@@ -207,7 +210,9 @@ class ai_guesser(guesser):
 		
 		#found 1 match - use the 1 book
 		if totbooks == 1 and num == 1:
-			return [bestbook + "|" + str(bestval)]
+			outD = []
+			outD.append(str(bestbook) + "|" + str(bestval))
+			return outD
 		
 		#could not find a good book - bogus :/
 		if bestval == 0:
@@ -220,6 +225,7 @@ class ai_guesser(guesser):
 
 		#use the book to get the best board words
 		wordProbs = {}
+		#wordProbs[x] = 0.5		#add the word itself in case it's not in the set
 		for w in boardWords:
 			if "*" in w:
 				continue
@@ -232,12 +238,11 @@ class ai_guesser(guesser):
 
 		outD = []
 		for k, v in sorted(wordProbs.items(), key=lambda item: float(item[1]), reverse=True):
-			if k.upper() in boardWords:
-				outD.append(str(k) + "|" + str(v))
+			outD.append(str(k) + "|" + str(v))
 			print("%s: %s" % (k, v))
 
 		#return the top x guesses
-		return outD[:num]
+		return outD[:(num)]
 
 
 

@@ -258,7 +258,7 @@ class ai_codemaster(codemaster):
 			sums.append(sum(tfidfs[b]))
 
 		m = sums.index(max(sums))
-		return books[m], np.count_nonzero(tfidfs[m])
+		return books[m], (np.count_nonzero(tfidfs[m])+1)
 
 	#get the word with the best tf-idf score for a book
 	def getBestWord(self, book, boardwords):
@@ -268,6 +268,11 @@ class ai_codemaster(codemaster):
 		for w in words:
 			if w.upper() in boardwords:
 				continue
+			if w in self.words:
+				continue
+			if w.upper() in self.words:
+				continue
+				
 			tfidf.append(self.tf_hash[book][w])
 
 		
