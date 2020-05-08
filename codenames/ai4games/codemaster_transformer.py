@@ -178,7 +178,9 @@ class ai_codemaster(codemaster):
 		recomm3 = [w for w in nltk.wordpunct_tokenize(recomm2) \
 		if w.lower() in self.corp_words or not w.isalpha()]
 
-		stop_words = set(stopwords.words('english')) 
+		prepositions = open('prepositions_etc.txt').read().splitlines() #create list with prepositions
+		stop_words = nltk.corpus.stopwords.words('english')		#change set format
+		stop_words.extend(prepositions)					#add prepositions and similar to stopwords
 		word_tokens = word_tokenize(' '.join(recomm3)) 
 		recomm4 = [w for w in word_tokens if not w in stop_words]
 
