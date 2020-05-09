@@ -9,11 +9,7 @@ from nltk.corpus import gutenberg
 import nltk
 from numpy.linalg import norm
 
-from operator import itemgetter
 from numpy import *
-import gensim.models.keyedvectors as word2vec
-import gensim.downloader as api
-import itertools
 import numpy as np
 import random
 import scipy

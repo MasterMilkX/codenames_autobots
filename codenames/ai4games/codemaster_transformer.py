@@ -9,13 +9,7 @@ from nltk.corpus import gutenberg
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 
-from numpy.linalg import norm
 from players.codemaster import codemaster
-from operator import itemgetter
-from numpy import *
-import gensim.models.keyedvectors as word2vec
-import gensim.downloader as api
-import itertools
 
 import random
 import scipy
