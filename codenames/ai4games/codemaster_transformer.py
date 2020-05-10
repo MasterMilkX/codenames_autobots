@@ -42,8 +42,8 @@ class ai_codemaster(codemaster):
 		self.model = AutoModelWithLMHead.from_pretrained("gpt2")
 
 		#get stop words and what-not
-		nltk.download('popular')
-		nltk.download('words')
+		nltk.download('popular',quiet=True)
+		nltk.download('words',quiet=True)
 		self.corp_words = set(nltk.corpus.words.words())
 
 		return
@@ -69,7 +69,7 @@ class ai_codemaster(codemaster):
 				red_words.append(self.words[i].lower())
 
 
-		print("RED:\t", red_words)
+		#print("RED:\t", red_words)
 
 
 		''' WRITE NEW CODE HERE '''
@@ -77,7 +77,7 @@ class ai_codemaster(codemaster):
 		spec_red_words = list(map(lambda w: "\u0120" + w, red_words))
 
 
-		print(spec_red_words)
+		#print(spec_red_words)
 		# 2. CREATE WORD EMBEDDINGS FOR THE RED WORDS
 		red_emb = self.word_embedding(spec_red_words)  #retrieves embedding for red_words from gpt2 layer 0 (static embedding)
 
@@ -128,10 +128,10 @@ class ai_codemaster(codemaster):
 
 
 		#DEBUG
-		print(subset)
+		#print(subset)
 		#print(red_emb[subset])
-		print(dist)
-		print(how_many)
+		#print(dist)
+		#print(how_many)
 
 
 		# 4. FIND THE CENTROID OF THE SUBSET
@@ -172,7 +172,7 @@ class ai_codemaster(codemaster):
 		recomm3 = [w for w in nltk.wordpunct_tokenize(recomm2) \
 		if w.lower() in self.corp_words or not w.isalpha()]
 
-		prepositions = open('prepositions_etc.txt').read().splitlines() #create list with prepositions
+		prepositions = open('ai4games/prepositions_etc.txt').read().splitlines() #create list with prepositions
 		stop_words = nltk.corpus.stopwords.words('english')		#change set format
 		stop_words.extend(prepositions)					#add prepositions and similar to stopwords
 		word_tokens = word_tokenize(' '.join(recomm3)) 
@@ -204,7 +204,7 @@ class ai_codemaster(codemaster):
 				recomm.append(self.tokenizer.decode((int(vecinos[1][0][i])), skip_special_tokens = True, clean_up_tokenization_spaces = True))         
 			clean_words = self.cleanWords(recomm)
 
-			print(clean_words)
+			#print(clean_words)
 
 			#7. Get the first word not in the board
 			for w in clean_words:

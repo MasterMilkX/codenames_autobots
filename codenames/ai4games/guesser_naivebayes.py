@@ -116,8 +116,10 @@ class ai_guesser(guesser):
 				continue
 
 			parts = l.split(":")
+			'''
 			if(len(parts) != 2):
 				print(l)
+			'''
 
 			c = parts[0].strip()
 			s = parts[1].strip()
@@ -343,7 +345,7 @@ class ai_guesser(guesser):
 			outD.append(str(k) + "|" + str(v))
 			print("%s: %s" % (k, v))
 
-		print(outD[:num])
+		#print(outD[:num])
 
 		#return the top x guesses
 		return outD[:num]

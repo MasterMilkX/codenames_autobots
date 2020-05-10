@@ -1,0 +1,2 @@
+['BLOCK', 'PARACHUTE', 'AFRICA', 'ROSE', 'GAS', 'ENGINE', 'TAG', 'SOLDIER', 'CHARGE', 'FORCE', 'SCIENTIST', 'EAGLE', 'PART', 'DECK', 'CROSS', 'CAR', 'DOG', 'DIVER', 'WASHER', 'CLUB', 'AMERICA', 'MOON', 'DANCE', 'LOG', 'BEIJING']
+['Civilian', 'Civilian', 'Civilian', 'Blue', 'Civilian', 'Red', 'Blue', 'Blue', 'Red', 'Blue', 'Blue', 'Red', 'Red', 'Blue', 'Assassin', 'Red', 'Civilian', 'Blue', 'Red', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Civilian']

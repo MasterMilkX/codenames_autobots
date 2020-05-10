@@ -20,7 +20,7 @@ import string
 
 import nltk
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+nltk.download('stopwords',quiet=True)
 from nltk.tokenize import word_tokenize
 
 
@@ -73,7 +73,7 @@ class ai_codemaster(codemaster):
 				bad_words.append(self.words[i].lower())
 			else:
 				red_words.append(self.words[i].lower())
-		print("RED:\t", red_words)
+		#print("RED:\t", red_words)
 
 
 		bestbook, ct = self.getBestBook(red_words)	#get the most related book
@@ -87,7 +87,7 @@ class ai_codemaster(codemaster):
 	def gutenberg_calcTFIDF(self):
 		self.sel_books = gutenberg.fileids()
 
-		print("Books: " + str(self.sel_books))
+		#print("Books: " + str(self.sel_books))
 
 		#make 2 tables of word frequencies
 		self.tf_hash = {}

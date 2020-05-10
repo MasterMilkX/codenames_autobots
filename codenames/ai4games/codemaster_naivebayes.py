@@ -121,8 +121,10 @@ class ai_codemaster(codemaster):
 				continue
 
 			parts = l.split(":")
+			'''
 			if(len(parts) != 2):
 				print(l)
+			'''
 
 			c = parts[0].strip()
 			s = parts[1].strip()
@@ -371,7 +373,7 @@ class ai_codemaster(codemaster):
 		for k, v in sorted(catProbs.items(), key=lambda item: float(item[1]), reverse=True):
 			if bestCat == "":
 				bestCat = k
-			print("%s: %s" % (k, v))
+			#print("%s: %s" % (k, v))
 
 		numWords = 0
 		for r in red_words:

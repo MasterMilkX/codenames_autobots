@@ -18,6 +18,7 @@ import gensim.models.keyedvectors as word2vec
 import gensim.downloader as api
 import argparse
 
+#modified by Milk
 
 class Game:
 	guesser = 0
@@ -33,6 +34,7 @@ class Game:
 		parser.add_argument("--w2v", help="Path to w2v file or 'none'",default='none')
 		parser.add_argument("--glove", help="Path to glove file or 'none'",default='none')
 		parser.add_argument("--wordnet", help="Name of wordnet file or 'none', most like ic-brown.dat",default='none')
+		parser.add_argument("--board", help="Path to the board to use for the game",default='none')
 		
 		args = parser.parse_args()
 
@@ -75,22 +77,51 @@ class Game:
 			self.seed = args.seed
 			random.seed(int(args.seed))
 
-		f = open("game_wordpool.txt", "r")
-		
-		if f.mode == 'r':
-			temp_array = f.read().splitlines()
-			self.words = set([])
-			# if duplicates were detected and the set length is not 25 then restart
-			while len(self.words) != 25:
-				self.words = set([])
-				for x in range(0, 25):
-					random.shuffle(temp_array)
-					self.words.add(temp_array.pop())
-			self.words = list(sorted(self.words))
-			random.shuffle(self.words)
 
-		self.maps = ["Red"]*8 + ["Blue"]*7 + ["Civilian"]*9 + ["Assassin"]
-		random.shuffle(self.maps)
+		#generate a new board
+		if args.board == "none":
+			print("Generating random board")
+			f = open("game_wordpool.txt", "r")
+			
+			if f.mode == 'r':
+				temp_array = f.read().splitlines()
+				self.words = set([])
+				# if duplicates were detected and the set length is not 25 then restart
+				while len(self.words) != 25:
+					self.words = set([])
+					for x in range(0, 25):
+						random.shuffle(temp_array)
+						self.words.add(temp_array.pop())
+				self.words = list(sorted(self.words))
+				random.shuffle(self.words)
+
+			self.maps = ["Red"]*8 + ["Blue"]*7 + ["Civilian"]*9 + ["Assassin"]
+			random.shuffle(self.maps)
+		#otherwise use a board already made
+		else:
+			print("Reading board from: " + args.board)
+
+			f = open(args.board, "r")
+			lines = f.read().splitlines()
+
+			#read the board
+			self.words = []
+			wordIn = lines[0].replace("[", '').replace("]", '').replace("'", "").replace(" ", "")
+			splWords = wordIn.split(",")
+			for w in splWords:
+				self.words.append(w)
+
+			#read the roles
+			self.maps = []
+			rolesIn = lines[1].replace("[", '').replace("]", '').replace("'", "").replace(" ", "")
+			splRoles = rolesIn.split(",")
+			for r in splRoles:
+				self.maps.append(r)
+
+
+		print(self.words)
+		print(self.maps)
+
 
 	# prints out board with color-paired words, only for codemaster, color && stylistic
 	def display_board_codemaster(self):
@@ -99,13 +130,13 @@ class Game:
 		for i in range(len(self.words)):
 			if counter >= 1 and i % 5 == 0:
 				print("\n")
-			if self.maps[i] is 'Red':
+			if self.maps[i] == 'Red':
 				print(str.center(colorama.Fore.RED + self.words[i], 15), " ", end='')
 				counter += 1
-			elif self.maps[i] is 'Blue':
+			elif self.maps[i] == 'Blue':
 				print(str.center(colorama.Fore.RESET + self.words[i], 15), " ", end='')
 				counter += 1
-			elif self.maps[i] is 'Civilian':
+			elif self.maps[i] == 'Civilian':
 				print(str.center(colorama.Fore.RESET + self.words[i], 15), " ", end='')
 				counter += 1
 			else:
@@ -137,13 +168,13 @@ class Game:
 		for i in range(len(self.maps)):
 			if counter >= 1 and i % 5 == 0:
 				print("\n")
-			if self.maps[i] is 'Red':
+			if self.maps[i] == 'Red':
 				print(str.center(colorama.Fore.RED + self.maps[i], 15), " ", end='')
 				counter += 1
-			elif self.maps[i] is 'Blue':
+			elif self.maps[i] == 'Blue':
 				print(str.center(colorama.Fore.RESET + self.maps[i], 15), " ", end='')
 				counter += 1
-			elif self.maps[i] is 'Civilian':
+			elif self.maps[i] == 'Civilian':
 				print(str.center(colorama.Fore.RESET + self.maps[i], 15), " ", end='')
 				counter += 1
 			else:

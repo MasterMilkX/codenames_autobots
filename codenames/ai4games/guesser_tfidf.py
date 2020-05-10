@@ -18,7 +18,7 @@ import random
 import scipy
 
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+nltk.download('stopwords',quiet=True)
 from nltk.tokenize import word_tokenize
 import difflib
 
@@ -209,11 +209,13 @@ class ai_guesser(guesser):
 
 		
 		#found 1 match - use the 1 book
+		'''
 		if totbooks == 1 and num == 1:
 			outD = []
 			outD.append(str(bestbook) + "|" + str(bestval))
 			return outD
-		
+		'''
+
 		#could not find a good book - bogus :/
 		if bestval == 0:
 			print("random selection guess")

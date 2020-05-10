@@ -31,3 +31,4 @@ TOTAL:25 B:3 C:2 A:1 R:2 CM:ai4games.codemaster_naivebayes GUESSER:ai4games.gues
 TOTAL:25 B:4 C:6 A:1 R:7 CM:ai4games.codemaster_naivebayes GUESSER:ai4games.guesser_naivebayes SEED:time
 TOTAL:13 B:4 C:6 A:0 R:8 CM:human GUESSER:ai4games.guesser_transformer SEED:time
 TOTAL:10 B:0 C:4 A:0 R:8 CM:ai4games.codemaster_transformer GUESSER:ai4games.guesser_transformer SEED:time
+TOTAL:10 B:3 C:5 A:0 R:8 CM:ai4games.codemaster_transformer GUESSER:ai4games.guesser_transformer SEED:time
