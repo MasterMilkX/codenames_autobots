@@ -1,0 +1,2 @@
+['MARBLE', 'LEMON', 'BOMB', 'TIE', 'SATURN', 'TRIANGLE', 'MEXICO', 'CRANE', 'STAFF', 'HEART', 'ANGEL', 'GROUND', 'STRING', 'TELESCOPE', 'BRIDGE', 'TOOTH', 'MOON', 'BARK', 'RACKET', 'MILLIONAIRE', 'DINOSAUR', 'EGYPT', 'FIRE', 'FOOT', 'CODE']
+['Civilian', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Assassin', 'Civilian', 'Blue', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Blue', 'Civilian', 'Blue', 'Civilian', 'Red', 'Red', 'Civilian', 'Blue', 'Red', 'Red', 'Red']

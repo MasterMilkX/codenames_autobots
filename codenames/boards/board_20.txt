@@ -1,0 +1,2 @@
+['MOON', 'BILL', 'GRASS', 'PYRAMID', 'ROBOT', 'PRINCESS', 'WEB', 'DEATH', 'CELL', 'HORN', 'CHINA', 'STAFF', 'PLANE', 'COMIC', 'MOLE', 'NUT', 'RACKET', 'WATCH', 'MODEL', 'PENGUIN', 'FALL', 'DRAGON', 'THUMB', 'ENGINE', 'NOVEL']
+['Red', 'Red', 'Red', 'Blue', 'Blue', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Red', 'Assassin', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Red', 'Civilian', 'Red', 'Blue', 'Blue', 'Civilian', 'Civilian', 'Blue', 'Blue']

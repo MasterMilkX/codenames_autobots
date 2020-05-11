@@ -1,0 +1,2 @@
+['JACK', 'NOTE', 'CLOAK', 'TRACK', 'FENCE', 'MISSILE', 'LUCK', 'BEAR', 'LIMOUSINE', 'MODEL', 'BUFFALO', 'MILLIONAIRE', 'SERVER', 'TEACHER', 'KANGAROO', 'NET', 'COMIC', 'GAME', 'SPIDER', 'TAG', 'FAIR', 'CONTRACT', 'AIR', 'ROW', 'PASTE']
+['Civilian', 'Civilian', 'Blue', 'Red', 'Blue', 'Civilian', 'Assassin', 'Red', 'Civilian', 'Red', 'Blue', 'Blue', 'Red', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Blue', 'Civilian', 'Civilian', 'Red']

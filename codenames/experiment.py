@@ -22,8 +22,9 @@ for i in range(len(CODEMASTER)):
 
 		for t in range(NUM_EXP):
 			print(CODEMASTER[i] + "-" + GUESSER[j] + " " + str(t+1) + "/" + str(NUM_EXP) + "         ")
-
-			proc = os.popen('python3 game.py ai4games.codemaster_' + CODEMASTER[i] + ' ai4games.guesser_' + GUESSER[j]).read() + ' --board boards/board_' + str(t) + ".txt"
+			cmd = 'python3 game.py ai4games.codemaster_' + CODEMASTER[i] + ' ai4games.guesser_' + GUESSER[j] + ' --board boards/board_' + str(t+1) + ".txt"
+			
+			proc = os.popen(cmd).read()
 			lines = proc.split("\n")
 
 			turns = 25

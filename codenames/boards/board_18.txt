@@ -1,0 +1,2 @@
+['TEMPLE', 'PYRAMID', 'POISON', 'AFRICA', 'AUSTRALIA', 'CAST', 'SPACE', 'ROOT', 'BOLT', 'LAP', 'MEXICO', 'WELL', 'KEY', 'BUTTON', 'STOCK', 'CROSS', 'SPOT', 'SNOW', 'HOTEL', 'JAM', 'BERLIN', 'SLIP', 'DOG', 'TEACHER', 'FIGHTER']
+['Blue', 'Assassin', 'Civilian', 'Blue', 'Red', 'Red', 'Blue', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Blue', 'Civilian', 'Civilian', 'Red', 'Red', 'Civilian', 'Blue', 'Civilian', 'Blue', 'Red', 'Red', 'Red', 'Red', 'Civilian']

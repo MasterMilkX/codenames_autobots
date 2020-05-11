@@ -1,0 +1,2 @@
+['YARD', 'DUCK', 'GOLD', 'CHECK', 'SPY', 'CRICKET', 'SPINE', 'WORM', 'GAME', 'MUG', 'KIWI', 'POST', 'SLIP', 'FALL', 'STADIUM', 'ALPS', 'STAFF', 'BUG', 'NEEDLE', 'PIANO', 'ROW', 'CAST', 'ATLANTIS', 'DEGREE', 'HONEY']
+['Civilian', 'Blue', 'Blue', 'Red', 'Red', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Civilian', 'Red', 'Red', 'Blue', 'Red', 'Civilian', 'Assassin', 'Civilian', 'Red', 'Blue', 'Red', 'Blue', 'Blue', 'Civilian']

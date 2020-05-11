@@ -1,0 +1,2 @@
+['CASINO', 'SHOE', 'CHEST', 'MOSCOW', 'MODEL', 'BUTTON', 'FIELD', 'HORSE', 'HOOD', 'GERMANY', 'CARD', 'SATELLITE', 'BRIDGE', 'POISON', 'KEY', 'CAR', 'SNOWMAN', 'DRESS', 'FIGURE', 'NUT', 'POINT', 'PLAY', 'SQUARE', 'JAM', 'CLOAK']
+['Blue', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Blue', 'Red', 'Civilian', 'Blue', 'Red', 'Blue', 'Red', 'Red', 'Civilian', 'Assassin', 'Civilian', 'Blue', 'Red', 'Civilian', 'Civilian']

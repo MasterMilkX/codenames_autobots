@@ -1,0 +1,2 @@
+['TIE', 'PUPIL', 'COMPOUND', 'MARBLE', 'APPLE', 'EGYPT', 'DIAMOND', 'WATCH', 'ROCK', 'WASHINGTON', 'CARROT', 'HOOK', 'FIGHTER', 'SHOE', 'STREAM', 'GLOVE', 'FAIR', 'GLASS', 'TAIL', 'BUTTON', 'AMAZON', 'STAR', 'LIGHT', 'ORANGE', 'DAY']
+['Red', 'Civilian', 'Red', 'Red', 'Assassin', 'Red', 'Civilian', 'Blue', 'Civilian', 'Civilian', 'Blue', 'Blue', 'Civilian', 'Blue', 'Blue', 'Red', 'Red', 'Civilian', 'Red', 'Civilian', 'Blue', 'Civilian', 'Civilian', 'Red', 'Blue']

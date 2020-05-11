@@ -23,7 +23,7 @@ from PyDictionary import PyDictionary
 
 import nltk
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+nltk.download('stopwords',quiet=True)
 from nltk.tokenize import word_tokenize
 
 # need to find general word classification methodology (like branching)
@@ -343,7 +343,7 @@ class ai_codemaster(codemaster):
 			for c in self.categories:
 				catProbs[c] += 3.0*wordCatProbs[r][c] 
 
-		
+		'''
 		#subtract the bad words probability * some weight
 		for b in a_words:
 			wordCatProbs[b] = self.allCategoryProb(b)
@@ -359,7 +359,7 @@ class ai_codemaster(codemaster):
 			wordCatProbs[b] = self.allCategoryProb(b)
 			for c in self.categories:
 				catProbs[c] -= wordCatProbs[b][c]
-		
+		'''
 
 		#get the best category
 		bestCat = ""

@@ -1,0 +1,2 @@
+['LOCK', 'JET', 'BRIDGE', 'PANTS', 'POINT', 'PLASTIC', 'MILLIONAIRE', 'SHIP', 'BANK', 'CAPITAL', 'AIR', 'FACE', 'PART', 'RING', 'EYE', 'NET', 'ROUND', 'DOCTOR', 'BUFFALO', 'OCTOPUS', 'ATLANTIS', 'PLATYPUS', 'SCUBA', 'BED', 'FORCE']
+['Red', 'Assassin', 'Blue', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Blue', 'Red', 'Civilian', 'Blue', 'Blue', 'Red', 'Blue', 'Civilian', 'Red', 'Red', 'Civilian', 'Red', 'Blue']

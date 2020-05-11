@@ -1,0 +1,2 @@
+['MICROSCOPE', 'FOREST', 'JAM', 'FORCE', 'PITCH', 'SHOP', 'UNICORN', 'GLASS', 'SUIT', 'NIGHT', 'SCALE', 'HOTEL', 'BUCK', 'OLIVE', 'PALM', 'LINK', 'NET', 'TRIP', 'FLUTE', 'CHEST', 'MATCH', 'MODEL', 'FIELD', 'SNOWMAN', 'POINT']
+['Civilian', 'Civilian', 'Civilian', 'Blue', 'Blue', 'Blue', 'Red', 'Red', 'Red', 'Red', 'Blue', 'Blue', 'Assassin', 'Blue', 'Civilian', 'Red', 'Red', 'Red', 'Blue', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Civilian', 'Civilian']

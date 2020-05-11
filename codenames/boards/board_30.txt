@@ -1,0 +1,2 @@
+['CONDUCTOR', 'TRIP', 'HEAD', 'SHOP', 'PRINCESS', 'NET', 'STAFF', 'VAN', 'COURT', 'NOTE', 'BOOM', 'PARK', 'DIVER', 'GAME', 'BANK', 'WAKE', 'CAP', 'POISON', 'FIGHTER', 'WIND', 'TABLE', 'RAY', 'BARK', 'BERRY', 'BOLT']
+['Red', 'Blue', 'Civilian', 'Civilian', 'Red', 'Blue', 'Civilian', 'Red', 'Assassin', 'Red', 'Civilian', 'Red', 'Blue', 'Civilian', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Blue', 'Civilian', 'Blue', 'Civilian', 'Red', 'Civilian']

@@ -1,0 +1,2 @@
+['COTTON', 'POLE', 'SUIT', 'FALL', 'PIN', 'VACUUM', 'FILM', 'RULER', 'FILE', 'PASS', 'PLOT', 'DRAGON', 'GOLD', 'CRANE', 'ROUND', 'IRON', 'CLOAK', 'DIAMOND', 'PLATE', 'EMBASSY', 'TUBE', 'CIRCLE', 'SKYSCRAPER', 'WELL', 'CANADA']
+['Blue', 'Red', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Assassin', 'Blue', 'Blue', 'Blue', 'Civilian', 'Red', 'Blue', 'Red']

@@ -1,0 +1,2 @@
+['KIWI', 'HAND', 'RULER', 'BUGLE', 'LIMOUSINE', 'OPERA', 'PANTS', 'SPIDER', 'PILOT', 'SLIP', 'DICE', 'TORCH', 'NET', 'PIRATE', 'HOTEL', 'FILM', 'AMAZON', 'SHARK', 'PIE', 'PARK', 'MOUSE', 'SATURN', 'FIGHTER', 'KID', 'GERMANY']
+['Red', 'Blue', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Blue', 'Civilian', 'Blue', 'Assassin', 'Blue', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Red', 'Civilian', 'Blue', 'Civilian', 'Red', 'Civilian', 'Red', 'Civilian', 'Red']

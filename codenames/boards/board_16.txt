@@ -1,0 +1,2 @@
+['STAR', 'CIRCLE', 'THEATER', 'MERCURY', 'SQUARE', 'NOVEL', 'PASS', 'FAIR', 'PIN', 'WITCH', 'PIT', 'MOUSE', 'SPELL', 'KNIFE', 'ORGAN', 'RACKET', 'COVER', 'LIMOUSINE', 'SHARK', 'POST', 'CHAIR', 'MOUTH', 'WORM', 'SUPERHERO', 'HAM']
+['Blue', 'Red', 'Civilian', 'Assassin', 'Blue', 'Civilian', 'Civilian', 'Blue', 'Red', 'Civilian', 'Red', 'Civilian', 'Red', 'Blue', 'Civilian', 'Red', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Civilian', 'Blue', 'Red', 'Civilian']

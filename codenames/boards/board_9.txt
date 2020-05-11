@@ -1,0 +1,2 @@
+['COMPOUND', 'PLOT', 'CLIFF', 'STAR', 'GRACE', 'NEEDLE', 'BLOCK', 'DECK', 'FALL', 'ALPS', 'HORN', 'CHARGE', 'FIRE', 'COPPER', 'SINK', 'SPIKE', 'IRON', 'MAIL', 'SCHOOL', 'PORT', 'TRUNK', 'TAP', 'DINOSAUR', 'TOOTH', 'RACKET']
+['Blue', 'Red', 'Blue', 'Red', 'Assassin', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Blue', 'Blue', 'Red', 'Blue', 'Civilian', 'Civilian', 'Civilian', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Red', 'Red', 'Red', 'Red', 'Blue']

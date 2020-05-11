@@ -1,0 +1,2 @@
+['TAIL', 'JUPITER', 'AMERICA', 'HAND', 'UNICORN', 'LIFE', 'DOG', 'PAPER', 'WATCH', 'FIGURE', 'PISTOL', 'ENGINE', 'PASS', 'CALF', 'BEIJING', 'TURKEY', 'HEAD', 'KEY', 'UNDERTAKER', 'MATCH', 'CENTER', 'DUCK', 'MOUSE', 'PARK', 'FOREST']
+['Red', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Civilian', 'Red', 'Red', 'Red', 'Red', 'Civilian', 'Blue', 'Civilian', 'Red', 'Assassin', 'Blue', 'Blue', 'Blue', 'Blue', 'Civilian', 'Red', 'Civilian', 'Blue', 'Civilian', 'Red']

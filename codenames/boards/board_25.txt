@@ -1,0 +1,2 @@
+['DRAGON', 'HOOK', 'NAIL', 'NEEDLE', 'CRANE', 'HEAD', 'DANCE', 'FOREST', 'PLASTIC', 'POUND', 'KEY', 'COMPOUND', 'SUIT', 'JET', 'CROSS', 'BOMB', 'PRESS', 'AIR', 'BARK', 'HOLLYWOOD', 'MOUTH', 'SPIKE', 'TOWER', 'PUPIL', 'PUMPKIN']
+['Assassin', 'Red', 'Civilian', 'Civilian', 'Red', 'Blue', 'Blue', 'Civilian', 'Red', 'Blue', 'Civilian', 'Civilian', 'Blue', 'Civilian', 'Civilian', 'Blue', 'Red', 'Red', 'Blue', 'Red', 'Red', 'Civilian', 'Blue', 'Civilian', 'Red']

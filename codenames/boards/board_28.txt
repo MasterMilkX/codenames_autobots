@@ -1,0 +1,2 @@
+['GENIUS', 'EMBASSY', 'KNIFE', 'DICE', 'POINT', 'SPINE', 'BALL', 'SPACE', 'BOARD', 'UNDERTAKER', 'NURSE', 'SWITCH', 'CHOCOLATE', 'CONTRACT', 'PUMPKIN', 'COPPER', 'TRACK', 'NIGHT', 'FOREST', 'ROME', 'JUPITER', 'PASTE', 'BOTTLE', 'FACE', 'KING']
+['Blue', 'Red', 'Red', 'Blue', 'Blue', 'Civilian', 'Civilian', 'Civilian', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Red', 'Red', 'Assassin', 'Blue', 'Civilian', 'Red', 'Civilian', 'Red', 'Blue']

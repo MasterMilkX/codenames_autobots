@@ -1,0 +1,2 @@
+['POLE', 'PLATE', 'BEAR', 'MILLIONAIRE', 'MAPLE', 'RABBIT', 'STRIKE', 'FIRE', 'COMIC', 'RING', 'JAM', 'FACE', 'MAIL', 'BLOCK', 'ROUND', 'BOX', 'SMUGGLER', 'MOUTH', 'CELL', 'PYRAMID', 'WEB', 'FILM', 'SPINE', 'HOTEL', 'FISH']
+['Blue', 'Blue', 'Blue', 'Red', 'Blue', 'Red', 'Civilian', 'Red', 'Civilian', 'Red', 'Civilian', 'Red', 'Civilian', 'Blue', 'Civilian', 'Red', 'Red', 'Civilian', 'Blue', 'Assassin', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Red']

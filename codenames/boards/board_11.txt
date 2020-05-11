@@ -1,0 +1,2 @@
+['MAIL', 'BOND', 'SCALE', 'SWING', 'DEGREE', 'CHINA', 'MUG', 'MISSILE', 'DANCE', 'WASHINGTON', 'POLE', 'SQUARE', 'CLUB', 'STOCK', 'ANTARCTICA', 'KETCHUP', 'CONDUCTOR', 'GOLD', 'TRIP', 'TRUNK', 'FENCE', 'MOUTH', 'DOG', 'GREEN', 'BANK']
+['Red', 'Red', 'Red', 'Blue', 'Red', 'Civilian', 'Blue', 'Civilian', 'Red', 'Blue', 'Red', 'Blue', 'Civilian', 'Red', 'Assassin', 'Blue', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Blue', 'Blue', 'Civilian', 'Civilian']

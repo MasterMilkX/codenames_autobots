@@ -1,0 +1,2 @@
+['WHALE', 'ROME', 'BEACH', 'HORSE', 'PLANE', 'SNOW', 'TIE', 'TRAIN', 'BAT', 'OLIVE', 'PORT', 'SCORPION', 'DATE', 'MATCH', 'BRUSH', 'SNOWMAN', 'PILOT', 'PIANO', 'COTTON', 'BRIDGE', 'GAME', 'TABLET', 'MAMMOTH', 'CALF', 'BOW']
+['Red', 'Blue', 'Civilian', 'Blue', 'Civilian', 'Civilian', 'Red', 'Red', 'Blue', 'Blue', 'Red', 'Civilian', 'Red', 'Blue', 'Red', 'Civilian', 'Blue', 'Red', 'Civilian', 'Assassin', 'Red', 'Civilian', 'Civilian', 'Civilian', 'Blue']

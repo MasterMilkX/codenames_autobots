@@ -1,0 +1,2 @@
+['SHARK', 'COOK', 'ROW', 'BOND', 'STICK', 'TICK', 'BAND', 'GREEN', 'SHAKESPEARE', 'SWING', 'PALM', 'HOOD', 'AMERICA', 'FIGURE', 'WAKE', 'BERLIN', 'TIME', 'CALF', 'KNIGHT', 'HOSPITAL', 'CONTRACT', 'BUTTON', 'ALIEN', 'FIGHTER', 'FIRE']
+['Red', 'Civilian', 'Blue', 'Assassin', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Red', 'Civilian', 'Blue', 'Civilian', 'Red', 'Red', 'Blue', 'Red', 'Blue', 'Blue', 'Blue', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Blue', 'Red']

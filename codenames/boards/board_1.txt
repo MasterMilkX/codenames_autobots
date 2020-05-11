@@ -1,0 +1,2 @@
+['TICK', 'TAG', 'HOLE', 'STREAM', 'LIMOUSINE', 'MUG', 'LEMON', 'DECK', 'BUTTON', 'UNDERTAKER', 'BOOT', 'CLOAK', 'VACUUM', 'BOND', 'CROSS', 'NIGHT', 'BARK', 'SHAKESPEARE', 'POUND', 'MILLIONAIRE', 'MOSCOW', 'DOCTOR', 'LIGHT', 'OIL', 'GERMANY']
+['Civilian', 'Civilian', 'Civilian', 'Blue', 'Red', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Blue', 'Blue', 'Blue', 'Red', 'Blue', 'Civilian', 'Red', 'Red', 'Blue', 'Civilian', 'Red', 'Blue', 'Red', 'Civilian', 'Assassin', 'Red']

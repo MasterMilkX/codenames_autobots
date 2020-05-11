@@ -1,0 +1,2 @@
+['SPINE', 'SCHOOL', 'TRIP', 'GAS', 'CARD', 'MISSILE', 'MARCH', 'RAY', 'TOOTH', 'TRAIN', 'BEAT', 'BERRY', 'FLUTE', 'KANGAROO', 'HOOD', 'CARROT', 'PIRATE', 'CHANGE', 'FIRE', 'GERMANY', 'ARM', 'HELICOPTER', 'BOTTLE', 'CRASH', 'ORANGE']
+['Civilian', 'Red', 'Assassin', 'Civilian', 'Blue', 'Blue', 'Civilian', 'Red', 'Civilian', 'Blue', 'Civilian', 'Civilian', 'Red', 'Red', 'Red', 'Civilian', 'Blue', 'Red', 'Blue', 'Blue', 'Civilian', 'Civilian', 'Blue', 'Red', 'Red']

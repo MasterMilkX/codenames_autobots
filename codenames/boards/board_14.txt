@@ -1,0 +1,2 @@
+['ROOT', 'GHOST', 'PLANE', 'CAST', 'CHOCOLATE', 'ROULETTE', 'PIPE', 'PRESS', 'FIGURE', 'KIWI', 'LINE', 'TAIL', 'POLE', 'ATLANTIS', 'HOSPITAL', 'REVOLUTION', 'POLICE', 'CAR', 'BANK', 'THEATER', 'FIELD', 'CENTER', 'DRAFT', 'STAFF', 'OIL']
+['Civilian', 'Civilian', 'Red', 'Civilian', 'Civilian', 'Red', 'Civilian', 'Red', 'Red', 'Blue', 'Blue', 'Civilian', 'Blue', 'Assassin', 'Civilian', 'Blue', 'Civilian', 'Blue', 'Civilian', 'Blue', 'Blue', 'Red', 'Red', 'Red', 'Red']

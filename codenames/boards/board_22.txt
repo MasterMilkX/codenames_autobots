@@ -1,0 +1,2 @@
+['LEMON', 'SHIP', 'PITCH', 'SHARK', 'WORM', 'BEIJING', 'LINE', 'MARBLE', 'TORCH', 'STREAM', 'TRAIN', 'TAIL', 'SLUG', 'STAFF', 'SINK', 'HEAD', 'DIAMOND', 'TAG', 'JAM', 'GREEN', 'CHINA', 'GAME', 'COLD', 'BEAR', 'BLOCK']
+['Blue', 'Assassin', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Civilian', 'Red', 'Red', 'Red', 'Red', 'Civilian', 'Red', 'Blue', 'Civilian', 'Blue', 'Civilian', 'Blue', 'Civilian', 'Red', 'Civilian', 'Blue', 'Blue', 'Red', 'Blue']

@@ -1,0 +1,2 @@
+['ROUND', 'TABLET', 'SPRING', 'WATCH', 'BOOM', 'CHURCH', 'BRUSH', 'CAT', 'CHOCOLATE', 'COLD', 'KNIGHT', 'SPINE', 'SNOWMAN', 'BARK', 'GOLD', 'QUEEN', 'SMUGGLER', 'ARM', 'RACKET', 'SOCK', 'DIVER', 'CELL', 'CALF', 'FORCE', 'MINT']
+['Blue', 'Civilian', 'Red', 'Red', 'Civilian', 'Blue', 'Red', 'Civilian', 'Red', 'Red', 'Red', 'Civilian', 'Assassin', 'Blue', 'Red', 'Civilian', 'Blue', 'Civilian', 'Civilian', 'Civilian', 'Red', 'Civilian', 'Blue', 'Blue', 'Blue']

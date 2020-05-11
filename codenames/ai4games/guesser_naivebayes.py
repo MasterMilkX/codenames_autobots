@@ -18,7 +18,7 @@ import random
 import scipy
 
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+nltk.download('stopwords',quiet=True)
 from nltk.tokenize import word_tokenize
 import difflib
 

@@ -1,0 +1,2 @@
+['BARK', 'OIL', 'JACK', 'TUBE', 'FAN', 'INDIA', 'LEPRECHAUN', 'PYRAMID', 'DUCK', 'SCREEN', 'POLICE', 'SATELLITE', 'BUGLE', 'DOG', 'WASHINGTON', 'PIRATE', 'GHOST', 'UNDERTAKER', 'THEATER', 'DWARF', 'ALPS', 'MARBLE', 'CAPITAL', 'POUND', 'BATTERY']
+['Blue', 'Red', 'Assassin', 'Red', 'Civilian', 'Civilian', 'Blue', 'Civilian', 'Civilian', 'Red', 'Red', 'Blue', 'Civilian', 'Civilian', 'Red', 'Blue', 'Red', 'Blue', 'Blue', 'Red', 'Civilian', 'Blue', 'Red', 'Civilian', 'Civilian']
