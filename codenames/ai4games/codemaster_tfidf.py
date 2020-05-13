@@ -31,6 +31,8 @@ class ai_codemaster(codemaster):
 	CATEGORIES = "ai4games/categories.txt";
 	WIKI_DICT_SET = "ai4games/wikiDict.txt";
 
+	USE_BAD = True
+
 	def __init__(self, brown_ic=None, glove_vecs=None, word_vectors=None):
 		#not necessary
 		'''
@@ -63,23 +65,32 @@ class ai_codemaster(codemaster):
 	def give_clue(self):
 		count = 0
 		red_words = []
-		bad_words = []
+		blue_words = []
+		civ_words = []
+		ass_words = []
 
+		tot_words = []
 		# Creates Red-Labeled Word arrays, and everything else arrays
 		for i in range(25):
 			if self.words[i][0] == '*':
 				continue
-			elif self.maps[i] == "Assassin" or self.maps[i] == "Blue" or self.maps[i] == "Civilian":
-				bad_words.append(self.words[i].lower())
+			elif self.maps[i] == "Assassin":
+				ass_words.append(self.words[i].lower())
+			elif self.maps[i] == "Blue":
+				blue_words.append(self.words[i].lower())
+			elif self.maps[i] == "Civilian":
+				civ_words.append(self.words[i].lower())
 			else:
 				red_words.append(self.words[i].lower())
+
+			tot_words.append(self.words[i].lower())
 		#print("RED:\t", red_words)
 
 
 		bestbook, ct = self.getBestBook(red_words)	#get the most related book
 		#print(bestbook)
 
-		return [self.getBestWord(bestbook, self.words), ct]		#return a tuple of a string and an integer
+		return [self.getBestWord(bestbook, self.words,red_words,blue_words,civ_words,ass_words), ct]		#return a tuple of a string and an integer
 
 	
 
@@ -231,6 +242,7 @@ class ai_codemaster(codemaster):
 			bt = []
 			bookset = self.tf_hash[b]
 			word_keys = bookset.keys()
+
 			for w in words:
 				if w in word_keys:
 					bt.append(bookset[w])
@@ -257,8 +269,9 @@ class ai_codemaster(codemaster):
 		return books[m], (np.count_nonzero(tfidfs[m])+1)
 
 	#get the word with the best tf-idf score for a book
-	def getBestWord(self, book, boardwords):
+	def getBestWord(self, book, boardwords, r,b,c,a):
 		words = list(self.tf_hash[book].keys())
+		#print(words)
 
 		tfidf = []
 		for w in words:
@@ -268,10 +281,40 @@ class ai_codemaster(codemaster):
 				continue
 			if w.upper() in self.words:
 				continue
-				
-			tfidf.append(self.tf_hash[book][w])
 
-		
+			#check if any board words are within the clue
+			inW = False
+			for sw in self.words:
+				if sw.lower() in w:
+					inW = True
+					continue
+
+			if inW:
+				continue
+				
+			if self.USE_BAD:
+				if self.inBook(w, b):		#blue book word
+					tfidf.append(self.tf_hash[book][w]*(-2.0))
+				elif self.inBook(w, c):		#civilian book word
+					tfidf.append(self.tf_hash[book][w]*(-1.0))
+				elif self.inBook(w, a):		#assassin book word
+					tfidf.append(self.tf_hash[book][w]*(-3.0))
+				else:						#unaffiliated word
+					tfidf.append(self.tf_hash[book][w])
+			else:
+				tfidf.append(self.tf_hash[book][w])
+			
+		#print(words)
+		#print(tfidf)
+
 		b = tfidf.index(max(tfidf))
 		return words[b]
+
+
+	def inBook(self, w, w_book_set):
+		for wb in w_book_set:
+			if w in self.tf_hash[wb].keys():
+				return True
+
+		return False
 

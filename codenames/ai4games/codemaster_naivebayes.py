@@ -28,11 +28,12 @@ from nltk.tokenize import word_tokenize
 
 # need to find general word classification methodology (like branching)
 
-
 class ai_codemaster(codemaster):
 
 	CATEGORIES = "ai4games/categories.txt";
 	WIKI_DICT_SET = "ai4games/wikiDict.txt";
+
+	USE_BAD = True
 
 	def __init__(self, brown_ic=None, glove_vecs=None, word_vectors=None):
 		#not necessary
@@ -82,7 +83,7 @@ class ai_codemaster(codemaster):
 				civ_words.append(self.words[i].lower())
 			else:
 				red_words.append(self.words[i].lower())
-		print("RED:\t", red_words)
+		#print("RED:\t", red_words)
 
 
 		return self.chooseCategory(red_words, ass_words, blue_words, civ_words)
@@ -343,23 +344,24 @@ class ai_codemaster(codemaster):
 			for c in self.categories:
 				catProbs[c] += 3.0*wordCatProbs[r][c] 
 
-		'''
+		
 		#subtract the bad words probability * some weight
-		for b in a_words:
-			wordCatProbs[b] = self.allCategoryProb(b)
-			for c in self.categories:
-				catProbs[c] -= (3.0*wordCatProbs[b][c])
+		if(self.USE_BAD):
+			for b in a_words:
+				wordCatProbs[b] = self.allCategoryProb(b)
+				for c in self.categories:
+					catProbs[c] -= (3.0*wordCatProbs[b][c])
 
-		for b in b_words:
-			wordCatProbs[b] = self.allCategoryProb(b)
-			for c in self.categories:
-				catProbs[c] -= (2.0*wordCatProbs[b][c])
+			for b in b_words:
+				wordCatProbs[b] = self.allCategoryProb(b)
+				for c in self.categories:
+					catProbs[c] -= (2.0*wordCatProbs[b][c])
 
-		for b in c_words:
-			wordCatProbs[b] = self.allCategoryProb(b)
-			for c in self.categories:
-				catProbs[c] -= wordCatProbs[b][c]
-		'''
+			for b in c_words:
+				wordCatProbs[b] = self.allCategoryProb(b)
+				for c in self.categories:
+					catProbs[c] -= wordCatProbs[b][c]
+			
 
 		#get the best category
 		bestCat = ""

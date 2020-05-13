@@ -119,8 +119,8 @@ class Game:
 				self.maps.append(r)
 
 
-		print(self.words)
-		print(self.maps)
+		#print(self.words)
+		#print(self.maps)
 
 
 	# prints out board with color-paired words, only for codemaster, color && stylistic

@@ -3,13 +3,15 @@ import subprocess
 
 #define config variables
 NUM_EXP = 30
+
+#algorithms to use (assuming in ai4games folder)
 CODEMASTER = ["transformer", "tfidf", "naivebayes"]
 GUESSER = ["transformer", "tfidf", "naivebayes"]
-#ALGORITHMS = ["tfidf", "transformer"]
-#ALGORITHMS = ["transformer"]
-OUTPUT_FILE = "30exp_results.csv"
+
+OUTPUT_FILE = "30weight_exp_results.csv"		#where to print the results of each pairing
 
 outFile = open(OUTPUT_FILE, 'w')
+os.system('rm bot_results.txt')		#remove the old bot results
 
 #set up headers
 outFile.write("codemaster,guesser,avg turns," + (",".join(str(n) for n in range(NUM_EXP))) + "\n")
