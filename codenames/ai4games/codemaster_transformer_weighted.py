@@ -102,8 +102,10 @@ class ai_codemaster(codemaster):
     
 		#print(spec_red_words)
 		# 2. CREATE WORD EMBEDDINGS FOR THE RED WORDS
-		red_emb = self.word_embedding(spec_red_words)  #retrieves embedding for red_words from gpt2 layer 0 (static embedding)
-
+		self.red_emb = self.word_embedding(spec_red_words)  #retrieves embedding for red_words from gpt2 layer 0 (static embedding)
+		self.blue_emb = self.word_embedding(spec_blue_words)
+		self.assassin_emb = self.word_embedding(spec_assassin_word)
+		self.civil_emb = self.word_embedding(spec_civil_words)
 
 		# 3. USE THE K NEAREST NEIGHBOR -LIKE ALGORITHM (FIND K NEIGHBORS BASED ON THRESHOLD)
 
@@ -120,12 +122,12 @@ class ai_codemaster(codemaster):
 		
 
 		# create distance matrix for words
-		num_words = red_emb.shape[0]
+		num_words = self.red_emb.shape[0]
 
 		dist = np.zeros((num_words,num_words))
 		for i in range(num_words):
-			for j in range((red_emb.shape[0])):
-				dist[i][j] = self.cos_sim(red_emb[i],red_emb[j])
+			for j in range((self.red_emb.shape[0])):
+				dist[i][j] = self.cos_sim(self.red_emb[i],self.red_emb[j])
 
 		## find the word with more neighbors within threshold
 
@@ -155,7 +157,7 @@ class ai_codemaster(codemaster):
 
 
 		# 4. FIND THE CENTROID OF THE SUBSET
-		center = torch.mean(red_emb[subset], dim=0)
+		center = torch.mean(self.red_emb[subset], dim=0)
 
 		# 5. USE KNN TO FIND THE CLOSEST MATCH IN THE GPT2 MATRIX FOR THE CENTROID VECTOR
 		emb_matrix = self.model.transformer.wte.weight
@@ -201,6 +203,7 @@ class ai_codemaster(codemaster):
 		excl_ascii = lambda s: re.match('^[\x00-\x7F]+$', s) != None		#checks for ascii only
 		is_uni_char = lambda s: (len(s) == 1) == True						#check if a univode character
 		recomm5 = [w for w in recomm4 if excl_ascii(w) and not is_uni_char(w) and not w.isdigit()]
+		
 
 		return recomm5
 
@@ -215,17 +218,21 @@ class ai_codemaster(codemaster):
 
 		low_board = list(map(lambda w: w.lower(), board))
 
-		while (tries < 5):
+		#while (tries < 5):
 
-			# 6. WORD CLEANUP AND PARSING
-			recomm = []
-			#numrec = (tries-1)*1000
-			for i in range((tries-1)*amt,(tries)*amt):
-				recomm.append(self.tokenizer.decode((int(vecinos[1][0][i])), skip_special_tokens = True, clean_up_tokenization_spaces = True))         
-			clean_words = self.cleanWords(recomm)
+		# 6. WORD CLEANUP AND PARSING
+		recomm = []
+		#numrec = (tries-1)*1000
+		for i in range((tries-1)*amt,(tries)*amt):
+			recomm.append(self.tokenizer.decode((int(vecinos[1][0][i])), skip_special_tokens = True, clean_up_tokenization_spaces = True))         
+		clean_words = self.cleanWords(recomm)
 
-			#print(clean_words)
-
+		#print(clean_words)
+			
+		return self.weightWords(clean_words,low_board)
+			
+			
+			'''
 			#7. Get the first word not in the board
 			for w in clean_words:
 				if w not in low_board:
@@ -233,75 +240,86 @@ class ai_codemaster(codemaster):
 
 			#otherwise try again
 			tries+=1
+			'''
 
-		return "??"		#i got nothing out of 5000 words
+		#return "??"		#i got nothing out of 5000 words
 
 
+	
 ###### new code
+	def weightWords(self, rec_words):
+		# exclude words on board from the recommended list
+		recomm6 = [i for i in recomm5 if i not in low_board]
+
+		# find word embedding for recommended words
+		recomm6_vec = word_embedding(list(map(lambda w: "\u0120" + w, recomm6)))
+
+		#similarity between each recommendation and assassin
+		num_recomm = recomm6_vec.shape[0]   #number of words in the embedding matrix
+
+		sim_assassin = np.zeros((num_recomm),)
+		for i in range(num_recomm):
+		    sim_assassin[i] = cos_sim(recomm6_vec[i],self.assassin_emb[0])
+
+		sim_assassin = sim_assassin.reshape(sim_assassin.shape[0],1)
+
+		# create similarity matrix for recomm and blue words
+		num_recomm = recomm6_vec.shape[0]   #number of words in the clean recommendation list
+		num_blue = self.blue_emb.shape[0]   #number of words in 'subset' used for centroid
 
 
+		sim_blue = np.zeros((num_recomm, num_blue))
+		for i in range(num_recomm):
+		    for j in range(num_blue):
+			sim_blue[i][j] = cos_sim(recomm6_vec[i],self.blue_emb[j])
 
-# exclude words on board from the recommended list
-recomm6 = [i for i in recomm5 if i not in low_board]
-
-# find word embedding for recommended words
-recomm6_vec = word_embedding(list(map(lambda w: "\u0120" + w, recomm6)))
-
-#similarity between each recommendation and assassin
-num_recomm = recomm6_vec.shape[0]   #number of words in the embedding matrix
-
-sim_assassin = np.zeros((num_recomm),)
-for i in range(num_recomm):
-    sim_assassin[i] = cos_sim(recomm6_vec[i],assassin_emb[0])
-
-sim_assassin = sim_assassin.reshape(sim_assassin.shape[0],1)
-
-# create similarity matrix for recomm and blue words
-num_recomm = recomm6_vec.shape[0]   #number of words in the clean recommendation list
-num_blue = blue_emb.shape[0]   #number of words in 'subset' used for centroid
+		# create similarity matrix for recomm and civilians words
+		num_recomm = recomm6_vec.shape[0]   #number of words in the clean recommendation list
+		num_civil = self.civil_emb.shape[0]   #number of words in 'subset' used for centroid
 
 
-sim_blue = np.zeros((num_recomm, num_blue))
-for i in range(num_recomm):
-    for j in range(num_blue):
-        sim_blue[i][j] = cos_sim(recomm6_vec[i],blue_emb[j])
+		sim_civil = np.zeros((num_recomm, num_civil))
+		for i in range(num_recomm):
+		    for j in range(num_civil):
+			sim_civil[i][j] = cos_sim(recomm6_vec[i],self.civil_emb[j])
 
-# create similarity matrix for recomm and civilians words
-num_recomm = recomm6_vec.shape[0]   #number of words in the clean recommendation list
-num_civil = civil_emb.shape[0]   #number of words in 'subset' used for centroid
+		#dist similarity recommendations and center
+		num_recomm = recomm6_vec.shape[0]   #number of words in the embedding matrix
 
+		sim_center = np.zeros((num_recomm))
+		for i in range(num_recomm):
+		    sim_center[i] = cos_sim(recomm6_vec[i],center)
 
-sim_civil = np.zeros((num_recomm, num_civil))
-for i in range(num_recomm):
-    for j in range(num_civil):
-        sim_civil[i][j] = cos_sim(recomm6_vec[i],civil_emb[j])
+		sim_center = sim_center.reshape(sim_center.shape[0],1)
 
-#dist similarity recommendations and center
-num_recomm = recomm6_vec.shape[0]   #number of words in the embedding matrix
+		#find similarity ratio for recommended words between center and (assasin, blue, civil)
+		ratio_assasin = sim_center / sim_assassin
+		ratio_blue = sim_center / sim_blue
+		ratio_civil = sim_center / sim_civil
 
-sim_center = np.zeros((num_recomm))
-for i in range(num_recomm):
-    sim_center[i] = cos_sim(recomm6_vec[i],center)
+		#define weights for each kind of word
+		assassin_weight = 5
+		blue_weight = 3
+		civil_weight = 1
 
-sim_center = sim_center.reshape(sim_center.shape[0],1)
-
-#find similarity ratio for recommended words between center and (assasin, blue, civil)
-ratio_assasin = sim_center / sim_assassin
-ratio_blue = sim_center / sim_blue
-ratio_civil = sim_center / sim_civil
-
-#define weights for each kind of word
-assassin_weight = 5
-blue_weight = 3
-civil_weight = 1
-
-#find the total ratio for each recommended word
-recomm_ratio = (ratio_assasin * assassin_weight) + \
-    (np.min(ratio_blue, axis=1).reshape(ratio_blue.shape[0],1) * blue_weight) + \
-    (np.min(ratio_civil, axis=1).reshape(ratio_civil.shape[0],1) * civil_weight)
+		#find the total ratio for each recommended word
+		recomm_ratio = (ratio_assasin * assassin_weight) + \
+		    (np.min(ratio_blue, axis=1).reshape(ratio_blue.shape[0],1) * blue_weight) + \
+		    (np.min(ratio_civil, axis=1).reshape(ratio_civil.shape[0],1) * civil_weight)
 
 
-recomm_ratio
-
-[sorted(recomm_ratio, reverse=True).index(x) for x in recomm_ratio] #from low to high
+		#print(recomm_ratio)
+		
+		rec_rat = {}
+		for r in range(len(recomm6)):
+			rec_rat[recomm6[r]] = recomm_ratio[r] 
+			
+		print(rec_rat)
+		
+		#[sorted(recomm_ratio, reverse=True).index(x) for x in recomm_ratio] #from low to high
+		sorted(rec_rat.items(), key=lambda item: float(item[1]), reverse=True)
+		
+		print(rec_rat)
+		
+		return rec_rat.keys()[0]
 ##### not working!!!!!!!!!
