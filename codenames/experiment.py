@@ -5,7 +5,7 @@ import subprocess
 NUM_EXP = 30
 
 #algorithms to use (assuming in ai4games folder)
-CODEMASTER = ["transformer", "tfidf", "naivebayes"]
+CODEMASTER = ["transformer_weighted", "tfidf", "naivebayes"]
 GUESSER = ["transformer", "tfidf", "naivebayes"]
 
 OUTPUT_FILE = "30weight_exp_results.csv"		#where to print the results of each pairing

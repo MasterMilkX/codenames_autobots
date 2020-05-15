@@ -3,7 +3,7 @@ import seaborn as sb
 import matplotlib.pyplot as plt
 
 def main():
-	bot_res_file = open('30exp_bot_results.txt', 'r')
+	bot_res_file = open('w2vglove_bot_results', 'r')
 	res = bot_res_file.readlines()
 
 	data = {}
@@ -66,12 +66,12 @@ def main():
 	#print(list(data.keys()))
 	#print(data['transformer-transformer'])
 	
-	#csv_out(data)
+	csv_out(data)
 
-	heatmap_out(data, codemasters, guessers, 'WINS',0.0,1.0)
-	heatmap_out(data, codemasters, guessers, 'CARDS_LEFT')
-	heatmap_out(data, codemasters, guessers, 'R',0.0,8.0)
-	heatmap_out(data, codemasters, guessers, 'BAD_WORDS_GUESS',0.0,17.0)
+	#heatmap_out(data, codemasters, guessers, 'WINS',0.0,1.0)
+	#heatmap_out(data, codemasters, guessers, 'CARDS_LEFT')
+	#heatmap_out(data, codemasters, guessers, 'R',0.0,8.0)
+	#heatmap_out(data, codemasters, guessers, 'BAD_WORDS_GUESS',0.0,17.0)
 
 
 

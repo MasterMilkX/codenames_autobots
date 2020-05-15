@@ -138,6 +138,8 @@ class ai_codemaster(codemaster):
 		if(len(list(self.sel_books.keys())) > 0):		#already got all the data, don't need to do it again
 			return;
 
+		datasetDump = open("datasetDump.txt", 'w')
+
 		article_res = {}
 		n = 0
 		for c in completeWordSet:
@@ -186,6 +188,7 @@ class ai_codemaster(codemaster):
 			words = list(filter(lambda x: x != "", words))				#remove empty space
 			summ = " ".join(words)
 			words = [word for word in word_tokenize(summ) if not word in stopwords.words() and word.isalnum()]
+			datasetDump.write(" ".join(words))
 			article_res[k] = words
 
 		self.sel_books = article_res
@@ -223,6 +226,7 @@ class ai_codemaster(codemaster):
 			self.idf_hash[w] = np.log(len(self.sel_books)/self.idf_hash[w])
 
 		#print(list(self.idf_hash.keys()))
+		datasetDump.close()
 
 
 	def getBestBook(self, words):
