@@ -4,10 +4,10 @@ import subprocess
 #define config variables
 NUM_EXP = 30
 CODEMASTER = ["players.codemaster_w2vglove_05 --w2v vectors/GoogleNews-vectors-negative300.bin --glove vectors/glove.6B.300d.txt"]
-GUESSER = ["ai4games.guesser_transformer", "ai4games.guesser_tfidf", "ai4games.guesser_naivebayes"]
+GUESSER = ["ai4games.guesser_transformer_weighted", "ai4games.guesser_tfidf", "ai4games.guesser_naivebayes"]
 #ALGORITHMS = ["tfidf", "transformer"]
 #ALGORITHMS = ["transformer"]
-OUTPUT_FILE = "30kim_cm_exp_results.csv"
+OUTPUT_FILE = "30kim_cm_weight_exp_results.csv"
 
 outFile = open(OUTPUT_FILE, 'w')
 

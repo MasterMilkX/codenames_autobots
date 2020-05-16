@@ -1,0 +1,1 @@
+TOTAL:25 B:0 C:0 A:1 R:3 CM:ai4games.codemaster_transformer_weighted GUESSER:ai4games.guesser_transformer SEED:time
