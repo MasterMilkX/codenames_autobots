@@ -33,10 +33,10 @@ for i in range(len(CODEMASTER)):
 			endCt = [g for g in lines if "Game Counter:" in g]
 
 			#print(lines[-2])
-
-			turns = int(lines[lines.index(endCt[0])].split(": ")[1])
-			print(turns)
-			turnTable.append(turns)
+			if len(endCt) > 0 and len(lines[lines.index(endCt[0])].split(": ")) > 0:
+				turns = int(lines[lines.index(endCt[0])].split(": ")[1])
+				print(turns)
+				turnTable.append(turns)
 
 
 		print("")
